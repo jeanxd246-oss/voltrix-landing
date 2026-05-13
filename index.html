@@ -219,6 +219,7 @@
       background: linear-gradient(145deg, rgba(0, 30, 50, 0.8) 0%, rgba(0, 80, 120, 0.45) 100%);
       position: relative;
       overflow: hidden;
+      text-decoration: none;
     }
     .btn-primary::before {
       content: '';
@@ -492,6 +493,7 @@
       position: relative;
       overflow: hidden;
       text-transform: uppercase;
+      text-decoration: none;
     }
     .download-btn::before {
       content: '';
@@ -537,6 +539,7 @@
       margin-top: 0.8rem;
       font-family: var(--font-orbitron);
       letter-spacing: 0.05em;
+      min-height: 24px;
     }
 
     .code-section {
@@ -559,6 +562,8 @@
       font-size: 0.85rem;
       line-height: 1.5;
       box-shadow: inset 0 0 30px rgba(0, 242, 255, 0.1);
+      white-space: pre-wrap;
+      word-break: break-all;
     }
 
     .footer {
@@ -783,7 +788,7 @@ class Engine:
       const canvas = document.getElementById('particles-canvas');
       const ctx = canvas.getContext('2d');
       let width, height, particles = [];
-      let mouseX = width / 2, mouseY = height / 2;
+      let mouseX = 0, mouseY = 0;
 
       function resize() {
         width = window.innerWidth;
@@ -797,6 +802,8 @@ class Engine:
         mouseY = e.clientY;
       });
       resize();
+      mouseX = width / 2;
+      mouseY = height / 2;
 
       class Particle {
         constructor() {
@@ -1184,6 +1191,70 @@ class Engine:
         try: self.cur = fmt(float(self.cur)/100)
         except: self.cur = "Error"
 
+    def mem_store(self):
+        try: self.mem = float(self.cur)
+        except: pass
+
+    def mem_recall(self):
+        self.cur = fmt(self.mem); self.rst = False; self.done = False
+
+    def mem_clear(self): self.mem = 0.0
+    def mem_add(self):
+        try: self.mem += float(self.cur)
+        except: pass
+
+
+# ──────────────────────────────────────────
+#  CONVERSOR
+# ──────────────────────────────────────────
+CONV = {
+    "Longitud": [
+        ("m  → km",  0.001),    ("km → m",   1000),
+        ("m  → ft",  3.28084),  ("ft → m",   0.3048),
+        ("mi → km",  1.60934),  ("km → mi",  0.62137),
+        ("in → cm",  2.54),     ("cm → in",  0.393701),
+    ],
+    "Peso": [
+        ("kg → lb",  2.20462),  ("lb → kg",  0.453592),
+        ("g  → oz",  0.035274), ("oz → g",   28.3495),
+    ],
+    "Temperatura": [
+        ("°C → °F",  "cf"),     ("°F → °C",  "fc"),
+        ("°C → K",   "ck"),     ("K  → °C",  "kc"),
+    ],
+    "Velocidad": [
+        ("km/h → mph",  0.621371), ("mph → km/h", 1.60934),
+        ("m/s  → km/h", 3.6),     ("km/h → m/s", 0.277778),
+    ],
+    "Área": [
+        ("m²  → ft²",  10.7639),  ("ft² → m²",   0.092903),
+        ("ha  → acres",2.47105),  ("acres → ha",  0.404686),
+    ],
+    "Digital": [
+        ("B  → KB",  0.001),  ("KB → B",   1000),
+        ("KB → MB",  0.001),  ("MB → KB",  1000),
+        ("MB → GB",  0.001),  ("GB → MB",  1000),
+        ("GB → TB",  0.001),  ("TB → GB",  1000),
+    ],
+}
+TEMP_FN = {
+    "cf": lambda x: x*9/5+32,
+    "fc": lambda x: (x-32)*5/9,
+    "ck": lambda x: x+273.15,
+    "kc": lambda x: x-273.15,
+}
+
+def do_conv(cat, lbl, val):
+    items = dict(CONV[cat])
+    factor = items.get(lbl)
+    if factor is None:
+        return None
+    if isinstance(factor, str):
+        fn = TEMP_FN.get(factor)
+        return fn(val) if fn else None
+    return val * factor
+
+
 # ──────────────────────────────────────────
 #  APP PRINCIPAL
 # ──────────────────────────────────────────
@@ -1191,44 +1262,507 @@ class Voltrix(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.engine  = Engine()
+        self.history = []
+        self.expr_s  = ""
+        self.hist_s  = ""
+
         self.title("⚡ VOLTRIX")
         self.geometry("460x780")
+        self.minsize(400, 680)
         self.configure(fg_color=BG)
+        self.resizable(True, True)
+
         self._ui()
+        self._keys()
+        self._upd()
 
+    # ── HELPERS ─────────────────────────────
+    def _btn(self, parent, text, cmd,
+             fg=NUM_BG, tc=TEXT,
+             font_size=18, h=64,
+             cs=1, rs=1, bold=True):
+        w = ctk.CTkButton(
+            parent, text=text, command=cmd,
+            fg_color=fg, hover_color=SURF3,
+            text_color=tc,
+            font=("Courier New", font_size, "bold" if bold else "normal"),
+            corner_radius=12, height=h,
+            border_width=1, border_color=BORDER,
+        )
+        return w
+
+    def _upd(self):
+        v  = self.engine.cur
+        tc = GREEN if self.engine.done else (RED if v == "Error" else TEXT)
+        self.disp_main.configure(text=v, text_color=tc)
+        self.disp_expr.configure(text=self.expr_s)
+        self.disp_hist.configure(text=self.hist_s)
+
+    def _add_hist(self, expr, res):
+        ts = datetime.datetime.now().strftime("%H:%M")
+        self.history.insert(0, {"e": expr, "r": res, "t": ts})
+        if len(self.history) > 100:
+            self.history = self.history[:100]
+
+    # ── UI ──────────────────────────────────
     def _ui(self):
+        # Header
+        hdr = ctk.CTkFrame(self, fg_color=SURFACE, corner_radius=0, height=52)
+        hdr.pack(fill="x")
+        hdr.pack_propagate(False)
+
+        ctk.CTkLabel(hdr, text="⚡  VOLTRIX",
+                     font=("Courier New", 22, "bold"),
+                     text_color=ACCENT).pack(side="left", padx=18, pady=12)
+
+        self.dot = ctk.CTkLabel(hdr, text="●",
+                                font=("Arial", 12),
+                                text_color=GREEN)
+        self.dot.pack(side="right", padx=18)
+
         # Display
-        self.disp = ctk.CTkLabel(self, text="0",
-                                 font=("Courier New", 46, "bold"),
-                                 text_color=TEXT)
-        self.disp.pack(pady=20)
-        # Botones básicos
-        g = ctk.CTkFrame(self, fg_color="transparent")
-        g.pack()
-        for r, row in enumerate([["7","8","9","÷"],["4","5","6","×"],
-                                 ["1","2","3","−"],["C","0",".","+"]]):
-            for c, txt in enumerate(row):
-                ctk.CTkButton(g, text=txt, width=80, height=60,
-                              font=("Courier New",20,"bold"),
-                              fg_color=NUM_BG, text_color=TEXT,
-                              command=lambda t=txt: self._key(t)
-                              ).grid(row=r,column=c,padx=3,pady=3)
-        ctk.CTkButton(self, text="=", width=340, height=60,
-                      font=("Courier New",24,"bold"),
-                      fg_color=EQ_BG, text_color="white",
-                      command=lambda: self._key("=")
-                      ).pack(pady=10)
+        disp = ctk.CTkFrame(self, fg_color="#060a12",
+                            corner_radius=14,
+                            border_width=1, border_color=BORDER)
+        disp.pack(fill="x", padx=12, pady=(10,6))
 
-    def _key(self, k):
-        if k in "0123456789": self.engine.push(k)
-        elif k == ".": self.engine.push(".")
-        elif k in "+-×÷*/":
-            op = {"×":"*","÷":"/"}.get(k,k)
-            self.engine.set_op(op)
-        elif k == "=": self.engine.calculate()
-        elif k == "C": self.engine.clear()
-        self.disp.configure(text=self.engine.cur)
+        self.disp_hist = ctk.CTkLabel(disp, text="",
+                                      font=("Courier New", 11),
+                                      text_color=TEXT3,
+                                      anchor="e")
+        self.disp_hist.pack(fill="x", padx=14, pady=(10,0))
 
+        self.disp_expr = ctk.CTkLabel(disp, text="",
+                                      font=("Courier New", 14),
+                                      text_color=TEXT2,
+                                      anchor="e")
+        self.disp_expr.pack(fill="x", padx=14)
+
+        self.disp_main = ctk.CTkLabel(disp, text="0",
+                                      font=("Courier New", 46, "bold"),
+                                      text_color=TEXT,
+                                      anchor="e")
+        self.disp_main.pack(fill="x", padx=14, pady=(2,14))
+
+        # Tabs
+        tabs = ctk.CTkFrame(self, fg_color=SURF2,
+                            corner_radius=10,
+                            border_width=1, border_color=BORDER)
+        tabs.pack(fill="x", padx=12, pady=(0,6))
+
+        self._tab_btns = {}
+        for txt, key in [("ESTÁNDAR","std"),("CIENTÍFICA","sci"),
+                         ("HISTORIAL","hist"),("CONVERSOR","conv")]:
+            b = ctk.CTkButton(
+                tabs, text=txt, width=90, height=32,
+                font=("Courier New", 10, "bold"),
+                fg_color=SURF3, hover_color=SURF2,
+                text_color=TEXT2, corner_radius=8,
+                command=lambda k=key: self._tab(k)
+            )
+            b.pack(side="left", padx=4, pady=4)
+            self._tab_btns[key] = b
+
+        # Frames
+        self._frames = {}
+        for k in ("std","sci","hist","conv"):
+            f = ctk.CTkFrame(self, fg_color="transparent")
+            self._frames[k] = f
+
+        self._build_std()
+        self._build_sci()
+        self._build_hist()
+        self._build_conv()
+        self._tab("std")
+
+    def _tab(self, key):
+        for k, f in self._frames.items():
+            f.pack_forget()
+        self._frames[key].pack(fill="both", expand=True, padx=12, pady=4)
+        for k, b in self._tab_btns.items():
+            if k == key:
+                b.configure(fg_color=SURF3, text_color=ACCENT,
+                            border_width=1, border_color=BORDER)
+            else:
+                b.configure(fg_color="transparent", text_color=TEXT2,
+                            border_width=0)
+        if key == "hist":
+            self._render_hist()
+        if key == "conv":
+            self._conv_val_entry.delete(0, "end")
+            self._conv_val_entry.insert(0, self.engine.cur)
+
+    # ── ESTÁNDAR ────────────────────────────
+    def _build_std(self):
+        f = self._frames["std"]
+
+        # Memoria
+        mr = ctk.CTkFrame(f, fg_color="transparent")
+        mr.pack(fill="x", pady=(0,6))
+        for txt, cmd in [("MC",self.engine.mem_clear),("MR",self._mem_r),
+                         ("M+",self.engine.mem_add), ("MS",self.engine.mem_store)]:
+            ctk.CTkButton(mr, text=txt, width=68, height=30,
+                          font=("Courier New", 11, "bold"),
+                          fg_color=SURF2, hover_color=SURF3,
+                          text_color=TEXT2, corner_radius=8,
+                          border_width=1, border_color=BORDER,
+                          command=lambda c=cmd: self._do(c)).pack(side="left", padx=3)
+
+        g = ctk.CTkFrame(f, fg_color="transparent")
+        g.pack(fill="both", expand=True)
+        for c in range(4):
+            g.columnconfigure(c, weight=1, uniform="c")
+
+        layout = [
+            ("LIMPIAR", self._clear,         CLR_BG, RED,    10, 0, 0, 1),
+            ("+/−",     self._sign,          UTIL_BG,TEXT2,  18, 1, 0, 1),
+            ("%",       self._pct,           UTIL_BG,TEXT2,  18, 2, 0, 1),
+            ("÷",       lambda:self._op("/"),OP_BG,  ACCENT, 22, 3, 0, 1),
+
+            ("7", lambda:self._num("7"), NUM_BG,TEXT,22, 0,1,1),
+            ("8", lambda:self._num("8"), NUM_BG,TEXT,22, 1,1,1),
+            ("9", lambda:self._num("9"), NUM_BG,TEXT,22, 2,1,1),
+            ("×", lambda:self._op("*"), OP_BG, ACCENT,22,3,1,1),
+
+            ("4", lambda:self._num("4"), NUM_BG,TEXT,22, 0,2,1),
+            ("5", lambda:self._num("5"), NUM_BG,TEXT,22, 1,2,1),
+            ("6", lambda:self._num("6"), NUM_BG,TEXT,22, 2,2,1),
+            ("−", lambda:self._op("-"), OP_BG, ACCENT,22,3,2,1),
+
+            ("1", lambda:self._num("1"), NUM_BG,TEXT,22, 0,3,1),
+            ("2", lambda:self._num("2"), NUM_BG,TEXT,22, 1,3,1),
+            ("3", lambda:self._num("3"), NUM_BG,TEXT,22, 2,3,1),
+            ("+", lambda:self._op("+"), OP_BG, ACCENT,22,3,3,1),
+
+            ("⌫",  self._del,  DEL_BG, GOLD,  22, 0,4,1),
+            ("0",  lambda:self._num("0"), NUM_BG,TEXT,22,1,4,2),
+            (".",  self._dot,  NUM_BG, TEXT,  22, 3,4,1),
+
+            ("=",  self._calc, EQ_BG,  "white",26, 0,5,4),
+        ]
+
+        for (txt, cmd, fg, tc, fs, col, row, cs) in layout:
+            b = ctk.CTkButton(
+                g, text=txt, command=cmd,
+                fg_color=fg, hover_color=SURF3,
+                text_color=tc,
+                font=("Courier New", fs, "bold"),
+                corner_radius=12, height=64,
+                border_width=1, border_color=BORDER,
+            )
+            b.grid(row=row, column=col, columnspan=cs,
+                   padx=3, pady=3, sticky="nsew")
+
+        for r in range(6):
+            g.rowconfigure(r, weight=1, uniform="r")
+
+    # ── CIENTÍFICA ──────────────────────────
+    def _build_sci(self):
+        f = self._frames["sci"]
+
+        g = ctk.CTkFrame(f, fg_color="transparent")
+        g.pack(fill="both", expand=True)
+        for c in range(4):
+            g.columnconfigure(c, weight=1, uniform="c")
+
+        sci_rows = [
+            [("sin","sin"),("cos","cos"),("tan","tan"),("log","log")],
+            [("asin","asin"),("acos","acos"),("atan","atan"),("ln","ln")],
+            [("√x","sqrt"),("x²","sq"),("x³","cube"),("1/x","inv")],
+            [("eˣ","exp"),("|x|","abs"),("n!","fact"),("∛x","cbrt")],
+        ]
+        for ri, row in enumerate(sci_rows):
+            for ci, (lbl, fn) in enumerate(row):
+                b = ctk.CTkButton(
+                    g, text=lbl,
+                    command=lambda fn=fn: self._sci(fn),
+                    fg_color=SCI_BG, hover_color=SURF3,
+                    text_color=PURPLE,
+                    font=("Courier New", 13, "bold"),
+                    corner_radius=10, height=50,
+                    border_width=1, border_color=BORDER,
+                )
+                b.grid(row=ri, column=ci, padx=3, pady=3, sticky="nsew")
+            g.rowconfigure(ri, weight=1, uniform="r")
+
+        # Constantes
+        cr = ctk.CTkFrame(g, fg_color="transparent")
+        cr.grid(row=4, column=0, columnspan=2, padx=3, pady=3, sticky="nsew")
+        for txt, val in [("π", math.pi),("e", math.e)]:
+            ctk.CTkButton(cr, text=txt, width=80, height=40,
+                          font=("Courier New",14,"bold"),
+                          fg_color=SCI_BG, hover_color=SURF3,
+                          text_color=PURPLE, corner_radius=10,
+                          border_width=1, border_color=BORDER,
+                          command=lambda v=val: self._const(v)).pack(side="left", padx=3)
+
+        ctk.CTkButton(g, text="xʸ",
+                      command=lambda: self._op("^"),
+                      fg_color=OP_BG, hover_color=SURF3,
+                      text_color=ACCENT, font=("Courier New",16,"bold"),
+                      corner_radius=10, height=40,
+                      border_width=1, border_color=BORDER,
+                      ).grid(row=4, column=2, padx=3, pady=3, sticky="nsew")
+
+        ctk.CTkButton(g, text="LIMPIAR",
+                      command=self._clear,
+                      fg_color=CLR_BG, hover_color=SURF3,
+                      text_color=RED, font=("Courier New",10,"bold"),
+                      corner_radius=10, height=40,
+                      border_width=1, border_color=BORDER,
+                      ).grid(row=4, column=3, padx=3, pady=3, sticky="nsew")
+
+        g.rowconfigure(4, weight=1, uniform="r")
+
+        # Numpad compacto
+        np = ctk.CTkFrame(f, fg_color="transparent")
+        np.pack(fill="x", pady=(4,0))
+        for c in range(4):
+            np.columnconfigure(c, weight=1, uniform="c")
+
+        num_layout = [
+            ("7",lambda:self._num("7"),NUM_BG,TEXT, 0,0),
+            ("8",lambda:self._num("8"),NUM_BG,TEXT, 1,0),
+            ("9",lambda:self._num("9"),NUM_BG,TEXT, 2,0),
+            ("÷",lambda:self._op("/"), OP_BG, ACCENT,3,0),
+            ("4",lambda:self._num("4"),NUM_BG,TEXT, 0,1),
+            ("5",lambda:self._num("5"),NUM_BG,TEXT, 1,1),
+            ("6",lambda:self._num("6"),NUM_BG,TEXT, 2,1),
+            ("×",lambda:self._op("*"), OP_BG, ACCENT,3,1),
+            ("1",lambda:self._num("1"),NUM_BG,TEXT, 0,2),
+            ("2",lambda:self._num("2"),NUM_BG,TEXT, 1,2),
+            ("3",lambda:self._num("3"),NUM_BG,TEXT, 2,2),
+            ("−",lambda:self._op("-"), OP_BG, ACCENT,3,2),
+            ("⌫",self._del,            DEL_BG,GOLD,  0,3),
+            ("0",lambda:self._num("0"),NUM_BG,TEXT, 1,3),
+            (".",self._dot,             NUM_BG,TEXT, 2,3),
+            ("+",lambda:self._op("+"), OP_BG, ACCENT,3,3),
+        ]
+        for (txt,cmd,fg,tc,col,row) in num_layout:
+            ctk.CTkButton(np, text=txt, command=cmd,
+                          fg_color=fg, hover_color=SURF3,
+                          text_color=tc, font=("Courier New",18,"bold"),
+                          corner_radius=12, height=54,
+                          border_width=1, border_color=BORDER,
+                          ).grid(row=row,column=col,padx=3,pady=3,sticky="nsew")
+            np.rowconfigure(row, weight=1, uniform="r")
+
+        ctk.CTkButton(f, text="=", command=self._calc,
+                      fg_color=EQ_BG, hover_color="#2255ee",
+                      text_color="white", font=("Courier New",26,"bold"),
+                      corner_radius=12, height=58,
+                      border_width=0,
+                      ).pack(fill="x", padx=3, pady=(4,2))
+
+    # ── HISTORIAL ───────────────────────────
+    def _build_hist(self):
+        f = self._frames["hist"]
+
+        hdr = ctk.CTkFrame(f, fg_color="transparent")
+        hdr.pack(fill="x", pady=(4,8))
+        ctk.CTkLabel(hdr, text="HISTORIAL DE OPERACIONES",
+                     font=("Courier New",12,"bold"),
+                     text_color=TEXT2).pack(side="left")
+        ctk.CTkButton(hdr, text="LIMPIAR", width=80, height=28,
+                      font=("Courier New",10,"bold"),
+                      fg_color=CLR_BG, hover_color=SURF3,
+                      text_color=RED, corner_radius=8,
+                      border_width=1, border_color=BORDER,
+                      command=self._clear_hist).pack(side="right")
+
+        self._hist_frame = ctk.CTkScrollableFrame(
+            f, fg_color=SURFACE,
+            corner_radius=12,
+            border_width=1, border_color=BORDER,
+            scrollbar_button_color=SURF2,
+        )
+        self._hist_frame.pack(fill="both", expand=True)
+
+    def _render_hist(self):
+        for w in self._hist_frame.winfo_children():
+            w.destroy()
+        if not self.history:
+            ctk.CTkLabel(self._hist_frame,
+                         text="Sin operaciones registradas",
+                         font=("Courier New",12),
+                         text_color=TEXT3).pack(pady=24)
+            return
+        for item in self.history:
+            row = ctk.CTkFrame(self._hist_frame,
+                               fg_color=SURF2, corner_radius=10,
+                               border_width=1, border_color=BORDER)
+            row.pack(fill="x", pady=3, padx=2)
+            ctk.CTkLabel(row, text=item["e"],
+                         font=("Courier New",13),
+                         text_color=TEXT2,
+                         anchor="w").pack(side="left", padx=12, pady=8)
+            ctk.CTkLabel(row, text=f"= {item['r']}",
+                         font=("Courier New",15,"bold"),
+                         text_color=GREEN,
+                         anchor="e").pack(side="right", padx=12)
+
+    def _clear_hist(self):
+        self.history.clear()
+        self._render_hist()
+
+    # ── CONVERSOR ───────────────────────────
+    def _build_conv(self):
+        f = self._frames["conv"]
+
+        ctk.CTkLabel(f, text="CONVERSOR DE UNIDADES",
+                     font=("Courier New",12,"bold"),
+                     text_color=TEXT2).pack(anchor="w", pady=(4,10))
+
+        def row(lbl_txt, widget_fn):
+            r = ctk.CTkFrame(f, fg_color="transparent")
+            r.pack(fill="x", pady=4)
+            ctk.CTkLabel(r, text=lbl_txt, width=90,
+                         font=("Courier New",12),
+                         text_color=TEXT2, anchor="w").pack(side="left")
+            widget_fn(r)
+
+        self._conv_cat = ctk.StringVar(value="Longitud")
+        self._conv_op  = ctk.StringVar()
+
+        def build_cat(r):
+            ctk.CTkOptionMenu(r, values=list(CONV.keys()),
+                              variable=self._conv_cat,
+                              fg_color=SURF2, button_color=SURF3,
+                              text_color=TEXT,
+                              font=("Courier New",12),
+                              command=self._update_conv_ops,
+                              ).pack(side="left", fill="x", expand=True)
+
+        def build_op(r):
+            self._op_menu = ctk.CTkOptionMenu(r,
+                              variable=self._conv_op,
+                              fg_color=SURF2, button_color=SURF3,
+                              text_color=TEXT,
+                              font=("Courier New",12),
+                              )
+            self._op_menu.pack(side="left", fill="x", expand=True)
+
+        def build_val(r):
+            self._conv_val_entry = ctk.CTkEntry(r,
+                              fg_color=SURF2, text_color=TEXT,
+                              border_color=BORDER,
+                              font=("Courier New",14),
+                              placeholder_text="Valor...")
+            self._conv_val_entry.pack(side="left", fill="x", expand=True)
+
+        row("Categoría", build_cat)
+        row("Operación", build_op)
+        row("Valor",     build_val)
+
+        ctk.CTkButton(f, text="CONVERTIR",
+                      fg_color=EQ_BG, hover_color="#2255ee",
+                      text_color="white",
+                      font=("Courier New",14,"bold"),
+                      height=46, corner_radius=12,
+                      command=self._do_conv,
+                      ).pack(fill="x", pady=12)
+
+        self._conv_res = ctk.CTkLabel(f, text="",
+                                      font=("Courier New",28,"bold"),
+                                      text_color=ACCENT)
+        self._conv_res.pack(pady=4)
+        self._conv_sub = ctk.CTkLabel(f, text="",
+                                      font=("Courier New",12),
+                                      text_color=TEXT2)
+        self._conv_sub.pack()
+
+        self._update_conv_ops("Longitud")
+
+    def _update_conv_ops(self, cat):
+        opts = [lbl for lbl, _ in CONV.get(cat, [])]
+        self._op_menu.configure(values=opts)
+        if opts:
+            self._conv_op.set(opts[0])
+        self._conv_res.configure(text="")
+        self._conv_sub.configure(text="")
+
+    def _do_conv(self):
+        cat = self._conv_cat.get()
+        lbl = self._conv_op.get()
+        raw = self._conv_val_entry.get().strip()
+        try:
+            v = float(raw.replace(",",""))
+        except ValueError:
+            self._conv_res.configure(text="Valor inválido", text_color=RED)
+            return
+        res = do_conv(cat, lbl, v)
+        if res is None:
+            self._conv_res.configure(text="Error", text_color=RED)
+            return
+        parts = lbl.split("→")
+        u_from = parts[0].strip()
+        u_to   = parts[1].strip() if len(parts) > 1 else ""
+        self._conv_res.configure(text=f"{fmt(res)} {u_to}", text_color=ACCENT)
+        self._conv_sub.configure(text=f"{fmt(v)} {u_from}  →  {fmt(res)} {u_to}")
+
+    # ── ACCIONES ────────────────────────────
+    def _num(self, n): self.engine.push(n); self._upd()
+    def _dot(self):    self.engine.push("."); self._upd()
+
+    def _op(self, o):
+        self.expr_s = self.engine.set_op(o)
+        self._upd()
+
+    def _calc(self):
+        expr, res = self.engine.calculate()
+        if expr and res:
+            self.hist_s = f"{expr}  =  {res}"
+            self.expr_s = ""
+            self._add_hist(expr, res)
+        self._upd()
+
+    def _clear(self):
+        self.engine.clear()
+        self.expr_s = ""; self.hist_s = ""
+        self._upd()
+
+    def _del(self): self.engine.delete(); self._upd()
+    def _sign(self): self.engine.sign(); self._upd()
+    def _pct(self):  self.engine.pct();  self._upd()
+
+    def _sci(self, fn):
+        lbl, res = self.engine.sci(fn)
+        if lbl:
+            self.hist_s = f"{lbl}  =  {res}"
+            self.expr_s = ""
+            self._add_hist(lbl, res)
+        self._upd()
+
+    def _const(self, v):
+        self.engine.cur  = fmt(v)
+        self.engine.rst  = False
+        self.engine.done = False
+        self._upd()
+
+    def _mem_r(self): self.engine.mem_recall(); self._upd()
+    def _do(self, fn): fn(); self._upd()
+
+    # ── TECLADO ─────────────────────────────
+    def _keys(self):
+        self.bind("<Key>", self._key)
+
+    def _key(self, e):
+        k = e.char
+        if k in "0123456789":       self._num(k)
+        elif k == ".":              self._dot()
+        elif k == "+":              self._op("+")
+        elif k == "-":              self._op("-")
+        elif k == "*":              self._op("*")
+        elif k == "/":              self._op("/")
+        elif k in ("\r","\n"):      self._calc()
+        elif k == "%":              self._pct()
+        elif e.keysym == "BackSpace": self._del()
+        elif e.keysym == "Escape":    self._clear()
+
+
+# ──────────────────────────────────────────
+#  MAIN
+# ──────────────────────────────────────────
 if __name__ == "__main__":
     app = Voltrix()
     app.mainloop()`;
@@ -1236,7 +1770,7 @@ if __name__ == "__main__":
       // Mostrar código en la sección
       document.getElementById('codeBlock').textContent = VOLTRIX_SOURCE_CODE;
 
-      // ========== SISTEMA DE DESCARGA REAL ==========
+      // ========== SISTEMA DE DESCARGA REAL (ARCHIVO .PY) ==========
       function setupDownload(button, progressBar, progressFill, statusText) {
         button.addEventListener('click', function(e) {
           e.preventDefault();
@@ -1250,12 +1784,14 @@ if __name__ == "__main__":
               clearInterval(interval);
               statusText.textContent = '✅ ¡Descarga completada! Guardando voltrix.py...';
               
-              // Crear el archivo Python real para descargar
-              const blob = new Blob([VOLTRIX_SOURCE_CODE], { type: 'text/x-python' });
+              // Crear el archivo Python REAL para descargar (extensión .py)
+              const blob = new Blob([VOLTRIX_SOURCE_CODE], { 
+                type: 'text/x-python;charset=utf-8' 
+              });
               const url = URL.createObjectURL(blob);
               const element = document.createElement('a');
               element.setAttribute('href', url);
-              element.setAttribute('download', 'voltrix.py');
+              element.setAttribute('download', 'voltrix.py');  // ← Extensión .py (segura)
               element.style.display = 'none';
               document.body.appendChild(element);
               element.click();
@@ -1264,7 +1800,7 @@ if __name__ == "__main__":
               
               setTimeout(() => {
                 progressBar.style.display = 'none';
-                statusText.textContent = '📦 Archivo voltrix.py guardado. Ejecuta: python voltrix.py';
+                statusText.textContent = '📦 Archivo voltrix.py guardado. Ejecuta: pip install customtkinter && python voltrix.py';
               }, 3500);
             } else {
               width += Math.floor(Math.random() * 7) + 4;
