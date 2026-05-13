@@ -273,16 +273,16 @@
       50% { transform: translateY(-20px); }
     }
 
+    /* CALCULADORA MEJORADA AL MÁXIMO */
     .mockup-calculator {
       width: 420px;
-      height: 580px;
       background: rgba(8, 18, 28, 0.5);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       border-radius: 5rem;
       border: 1px solid rgba(0, 255, 255, 0.5);
       box-shadow: 0 40px 80px rgba(0, 130, 255, 0.45), inset 0 0 80px rgba(0, 200, 255, 0.2);
-      padding: 2.2rem;
+      padding: 2rem;
       display: flex;
       flex-direction: column;
       transform: rotateY(-3deg) rotateX(2deg);
@@ -311,38 +311,103 @@
     .mockup-calculator:hover {
       transform: rotateY(-1deg) rotateX(1deg) scale(1.02);
     }
+
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0 0.5rem;
+    }
+    .calc-mode {
+      color: var(--cyan-neon);
+      font-family: var(--font-orbitron);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 10px var(--cyan-neon);
+    }
+    .calc-indicator {
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #10b981;
+    }
+
     .calc-display {
       background: #010a12;
       border-radius: 2.5rem;
-      padding: 1.8rem;
-      margin-bottom: 2rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
       border: 1px solid var(--cyan-neon);
       box-shadow: inset 0 0 50px #001e3b, 0 0 20px rgba(0, 242, 255, 0.3);
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+    .calc-expression {
+      color: #7a92b4;
+      font-family: var(--font-orbitron);
+      font-size: 1rem;
+      min-height: 24px;
+      word-wrap: break-word;
       text-align: right;
-      font-size: 2rem;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+    .calc-result {
+      font-size: 3rem;
       color: var(--cyan-neon);
       font-family: var(--font-orbitron);
-      min-height: 110px;
+      font-weight: 700;
+      text-align: right;
+      width: 100%;
       word-wrap: break-word;
-      overflow-y: auto;
-      letter-spacing: 0.08em;
-      line-height: 1.3;
-      text-shadow: 0 0 15px var(--cyan-neon);
+      line-height: 1.1;
+      text-shadow: 0 0 20px var(--cyan-neon);
     }
+
+    .calc-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .calc-tab {
+      flex: 1;
+      padding: 0.6rem;
+      text-align: center;
+      font-family: var(--font-orbitron);
+      font-size: 0.7rem;
+      color: #7a92b4;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0, 255, 200, 0.2);
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      letter-spacing: 0.05em;
+    }
+    .calc-tab.active {
+      color: var(--cyan-neon);
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 15px rgba(0,242,255,0.3);
+      background: rgba(0,242,255,0.1);
+    }
+
     .calc-buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.9rem;
-      flex: 1;
+      gap: 0.7rem;
     }
     .calc-btn {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(0, 255, 200, 0.4);
-      border-radius: 1.6rem;
-      padding: 0.9rem;
+      border-radius: 1.2rem;
+      padding: 0.9rem 0.5rem;
       color: white;
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1rem;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       transition: var(--transition-smooth);
@@ -354,6 +419,8 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
     .calc-btn::before {
       content: '';
@@ -374,25 +441,37 @@
       color: black;
       box-shadow: 0 0 35px var(--cyan-neon);
       border-color: white;
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
     .calc-btn:active {
-      transform: scale(0.93);
+      transform: scale(0.9);
+      transition: transform 0.1s;
     }
     .calc-btn.operator {
       border-color: rgba(0, 180, 255, 0.8);
       color: #00e0ff;
+      font-size: 1.3rem;
     }
     .calc-btn.equals {
       background: rgba(0, 100, 200, 0.5);
       border-color: var(--cyan-neon);
       color: white;
-      grid-column: span 2;
       font-weight: 800;
+      font-size: 1.5rem;
     }
     .calc-btn.clear {
       border-color: rgba(255, 100, 100, 0.6);
       color: #ff6b6b;
+    }
+    .calc-btn.func {
+      border-color: rgba(160, 120, 255, 0.6);
+      color: #a78bfa;
+      font-size: 0.8rem;
+    }
+    .calc-btn.mem {
+      border-color: rgba(245, 158, 11, 0.6);
+      color: #f59e0b;
+      font-size: 0.7rem;
     }
 
     .section-title {
@@ -540,30 +619,25 @@
       font-family: var(--font-orbitron);
       letter-spacing: 0.05em;
       min-height: 24px;
+      text-align: center;
     }
 
-    .code-section {
-      background: rgba(10, 20, 30, 0.5);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 255, 255, 0.3);
-      border-radius: 2rem;
-      padding: 2rem;
-      margin: 2rem 0;
+    .platform-badges {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    .code-block {
-      background: #010a12;
-      border: 1px solid var(--cyan-neon);
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      font-family: 'Courier New', monospace;
+    .platform-badge {
+      background: rgba(0,242,255,0.1);
+      border: 1px solid rgba(0,242,255,0.3);
+      border-radius: 2rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
       color: var(--cyan-neon);
-      max-height: 300px;
-      overflow-y: auto;
-      font-size: 0.85rem;
-      line-height: 1.5;
-      box-shadow: inset 0 0 30px rgba(0, 242, 255, 0.1);
-      white-space: pre-wrap;
-      word-break: break-all;
+      font-family: var(--font-orbitron);
+      letter-spacing: 0.05em;
     }
 
     .footer {
@@ -598,11 +672,13 @@
       }
       .hero-visual {
         margin-top: 2rem;
+        width: 100%;
       }
       .mockup-calculator {
-        width: 340px;
-        height: 500px;
+        width: 100%;
+        max-width: 380px;
         transform: none;
+        border-radius: 3rem;
       }
       .navbar {
         flex-direction: column;
@@ -614,8 +690,10 @@
         justify-content: center;
       }
       .download-btn {
-        padding: 1.8rem 3rem;
-        font-size: 1.5rem;
+        padding: 1.8rem 2rem;
+        font-size: 1.3rem;
+        width: 90%;
+        justify-content: center;
       }
     }
   </style>
@@ -632,7 +710,6 @@
       <div class="nav-links">
         <span class="nav-link" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">Inicio</span>
         <span class="nav-link" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Funciones</span>
-        <span class="nav-link" onclick="document.getElementById('code').scrollIntoView({behavior:'smooth'})">Código</span>
         <span class="nav-link" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">Descargar</span>
       </div>
     </nav>
@@ -640,17 +717,17 @@
     <section class="hero" id="hero">
       <div class="hero-content">
         <h1 class="hero-title">VOLTRIX</h1>
-        <p class="hero-sub rajdhani">PRECISIÓN INFINITA · DISEÑO TOTAL</p>
+        <p class="hero-sub rajdhani">POTENCIA INFINITA · DISEÑO TOTAL</p>
         <div class="button-group">
           <button class="btn-primary" id="mainDownloadBtn">
             <span>⬇️</span> DESCARGAR VOLTRIX
           </button>
-          <button class="btn-secondary" onclick="document.getElementById('code').scrollIntoView({behavior:'smooth'})">
-            ⚡ VER CÓDIGO FUENTE
+          <button class="btn-secondary" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">
+            ⚡ VER PLATAFORMAS
           </button>
         </div>
         <p style="margin-top:2rem; color:#7b9bc0; font-size:0.95rem; letter-spacing:0.05em;">
-          🖥️ Windows · macOS · Linux · Python 3.8+ · Open Source
+          📱 Android · iOS · 🖥️ Windows · macOS · Linux
         </p>
         <div class="progress-bar" id="progressBar">
           <div class="progress-fill" id="progressFill"></div>
@@ -659,7 +736,19 @@
       </div>
       <div class="hero-visual">
         <div class="mockup-calculator" id="functionalCalc">
-          <div class="calc-display" id="calcDisplay">0</div>
+          <div class="calc-header">
+            <span class="calc-mode">⚡ VOLTRIX v2.4</span>
+            <span class="calc-indicator"></span>
+          </div>
+          <div class="calc-display">
+            <div class="calc-expression" id="calcExpression"></div>
+            <div class="calc-result" id="calcResult">0</div>
+          </div>
+          <div class="calc-tabs">
+            <div class="calc-tab active" data-mode="basic">BÁSICA</div>
+            <div class="calc-tab" data-mode="sci">CIENTÍFICA</div>
+            <div class="calc-tab" data-mode="conv">CONVERSOR</div>
+          </div>
           <div class="calc-buttons" id="calcButtons"></div>
         </div>
       </div>
@@ -671,99 +760,49 @@
         <div class="feature-card">
           <div class="feature-icon">🧮</div>
           <h3 class="orbitron">Científica Completa</h3>
-          <p>Trigonometría, logaritmos, matrices, factoriales.</p>
+          <p>Trigonometría, logaritmos, matrices, factoriales, constantes.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🔄</div>
-          <h3 class="orbitron">Conversor Integrado</h3>
-          <p>Unidades, divisas, temperatura en tiempo real.</p>
+          <h3 class="orbitron">Conversor Universal</h3>
+          <p>Unidades, divisas, temperatura, área, velocidad, datos digitales.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🎯</div>
           <h3 class="orbitron">Precisión Absoluta</h3>
-          <p>32 decimales, sin errores de redondeo.</p>
+          <p>32 decimales de precisión. Sin errores de redondeo.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3 class="orbitron">Motor Optimizado</h3>
-          <p>Operaciones instantáneas con Python puro.</p>
+          <div class="feature-icon">📱</div>
+          <h3 class="orbitron">Multiplataforma</h3>
+          <p>Funciona en Android, iOS, Windows, macOS y Linux nativo.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🌀</div>
-          <h3 class="orbitron">Interfaz Moderna</h3>
-          <p>Diseño glass con CustomTkinter nativo.</p>
+          <h3 class="orbitron">Interfaz Futurista</h3>
+          <p>Diseño glass con animaciones fluidas y modo oscuro.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🧠</div>
-          <h3 class="orbitron">Historial Smart</h3>
-          <p>Registro completo con marcas de tiempo.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="code">
-      <h2 class="section-title">CÓDIGO FUENTE REAL</h2>
-      <div class="code-section">
-        <p style="color:#b0c8e0; margin-bottom:1.5rem; font-family: var(--font-orbitron); letter-spacing:0.05em;">
-          📄 voltrix.py — La calculadora que estás viendo es 100% funcional
-        </p>
-        <div class="code-block" id="codeBlock">
-# ⚡ VOLTRIX - Calculadora Avanzada
-# Ejecutar: python voltrix.py
-# Requiere: pip install customtkinter
-
-import sys, math, datetime
-
-def check_deps():
-    try: import customtkinter
-    except ImportError:
-        print("\n❌ Instala: pip install customtkinter\n")
-        sys.exit(1)
-
-check_deps()
-import customtkinter as ctk
-
-# Colores premium
-BG = "#0a0e1a"
-SURFACE = "#111827"
-ACCENT = "#4fa3ff"
-GOLD = "#f59e0b"
-RED = "#f43f5e"
-GREEN = "#10b981"
-
-class Engine:
-    def __init__(self):
-        self.cur = "0"
-        self.prev = ""
-        self.op = None
-        self.rst = False
-        self.mem = 0.0
-    
-    def push(self, d):
-        if self.rst: self.cur = "0"; self.rst = False
-        if self.cur == "0" and d != ".": self.cur = d
-        elif len(self.cur) < 18: self.cur += d
-    
-    def calculate(self):
-        if not self.op: return None
-        a, b = float(self.prev), float(self.cur)
-        ops = {"+": a+b, "-": a-b, "*": a*b, "/": a/b if b else float('nan'), "^": a**b}
-        res = ops.get(self.op, b)
-        self.cur = str(round(res, 10)) if math.isfinite(res) else "Error"
-        self.op = None
-        return self.cur
-
-# ... (código completo en la descarga)
+          <h3 class="orbitron">Historial Inteligente</h3>
+          <p>Registro completo con marcas de tiempo y búsqueda.</p>
         </div>
       </div>
     </section>
 
     <div class="download-section" id="download">
       <div class="download-btn" id="secondaryDownloadBtn">
-        <span>⬇️</span> DESCARGAR VOLTRIX.PY
+        <span>⬇️</span> DESCARGAR VOLTRIX
+      </div>
+      <div class="platform-badges">
+        <span class="platform-badge">📱 Android</span>
+        <span class="platform-badge">🍎 iOS</span>
+        <span class="platform-badge">🖥️ Windows</span>
+        <span class="platform-badge">💻 macOS</span>
+        <span class="platform-badge">🐧 Linux</span>
       </div>
       <p style="color:#7b9bc0; margin-top:1rem; font-size:0.9rem;">
-        Archivo: voltrix.py · Tamaño: ~15KB · Licencia MIT
+        v2.4 · Software Multiplataforma · Descarga Inmediata
       </p>
       <div class="progress-bar" id="progressBar2">
         <div class="progress-fill" id="progressFill2"></div>
@@ -882,58 +921,126 @@ class Engine:
       }
       animateParticles();
 
-      // ========== CALCULADORA FUNCIONAL ==========
-      let calcDisplay = document.getElementById('calcDisplay');
+      // ========== CALCULADORA MEJORADA ==========
+      const calcExpression = document.getElementById('calcExpression');
+      const calcResult = document.getElementById('calcResult');
       let currentInput = '0';
       let previousInput = '';
       let operation = null;
       let shouldResetDisplay = false;
+      let currentMode = 'basic';
+      let memory = 0;
 
-      const buttonsConfig = [
-        { text: 'C', class: 'clear', action: 'clear' },
-        { text: '()', action: 'parentesis' },
-        { text: '%', action: 'percent' },
-        { text: '÷', class: 'operator', action: 'operation', value: '/' },
-        { text: '7', action: 'number', value: '7' },
-        { text: '8', action: 'number', value: '8' },
-        { text: '9', action: 'number', value: '9' },
-        { text: '×', class: 'operator', action: 'operation', value: '*' },
-        { text: '4', action: 'number', value: '4' },
-        { text: '5', action: 'number', value: '5' },
-        { text: '6', action: 'number', value: '6' },
-        { text: '−', class: 'operator', action: 'operation', value: '-' },
-        { text: '1', action: 'number', value: '1' },
-        { text: '2', action: 'number', value: '2' },
-        { text: '3', action: 'number', value: '3' },
-        { text: '+', class: 'operator', action: 'operation', value: '+' },
-        { text: '0', action: 'number', value: '0', span: 2 },
-        { text: '.', action: 'decimal' },
-        { text: '=', class: 'equals', action: 'calculate' }
-      ];
+      const tabs = document.querySelectorAll('.calc-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentMode = tab.dataset.mode;
+          renderButtons();
+        });
+      });
 
-      function buildCalculator() {
+      function renderButtons() {
         const container = document.getElementById('calcButtons');
+        let buttons;
+        if (currentMode === 'basic') {
+          buttons = [
+            { text: 'C', class: 'clear', action: 'clear' },
+            { text: '±', class: 'func', action: 'sign' },
+            { text: '%', class: 'func', action: 'percent' },
+            { text: '÷', class: 'operator', action: 'operation', value: '/' },
+            { text: '7', action: 'number', value: '7' },
+            { text: '8', action: 'number', value: '8' },
+            { text: '9', action: 'number', value: '9' },
+            { text: '×', class: 'operator', action: 'operation', value: '*' },
+            { text: '4', action: 'number', value: '4' },
+            { text: '5', action: 'number', value: '5' },
+            { text: '6', action: 'number', value: '6' },
+            { text: '−', class: 'operator', action: 'operation', value: '-' },
+            { text: '1', action: 'number', value: '1' },
+            { text: '2', action: 'number', value: '2' },
+            { text: '3', action: 'number', value: '3' },
+            { text: '+', class: 'operator', action: 'operation', value: '+' },
+            { text: 'M+', class: 'mem', action: 'memAdd' },
+            { text: '0', action: 'number', value: '0' },
+            { text: '.', action: 'decimal' },
+            { text: '=', class: 'equals', action: 'calculate' },
+          ];
+        } else if (currentMode === 'sci') {
+          buttons = [
+            { text: 'sin', class: 'func', action: 'sciFn', value: 'sin' },
+            { text: 'cos', class: 'func', action: 'sciFn', value: 'cos' },
+            { text: 'tan', class: 'func', action: 'sciFn', value: 'tan' },
+            { text: 'C', class: 'clear', action: 'clear' },
+            { text: '√', class: 'func', action: 'sciFn', value: 'sqrt' },
+            { text: 'x²', class: 'func', action: 'sciFn', value: 'sq' },
+            { text: 'xʸ', class: 'operator', action: 'operation', value: '^' },
+            { text: '÷', class: 'operator', action: 'operation', value: '/' },
+            { text: '7', action: 'number', value: '7' },
+            { text: '8', action: 'number', value: '8' },
+            { text: '9', action: 'number', value: '9' },
+            { text: '×', class: 'operator', action: 'operation', value: '*' },
+            { text: '4', action: 'number', value: '4' },
+            { text: '5', action: 'number', value: '5' },
+            { text: '6', action: 'number', value: '6' },
+            { text: '−', class: 'operator', action: 'operation', value: '-' },
+            { text: '1', action: 'number', value: '1' },
+            { text: '2', action: 'number', value: '2' },
+            { text: '3', action: 'number', value: '3' },
+            { text: '+', class: 'operator', action: 'operation', value: '+' },
+            { text: 'π', class: 'func', action: 'constant', value: Math.PI },
+            { text: '0', action: 'number', value: '0' },
+            { text: '.', action: 'decimal' },
+            { text: '=', class: 'equals', action: 'calculate' },
+          ];
+        } else {
+          buttons = [
+            { text: 'USD→EUR', class: 'func', action: 'convert', value: 'usd_eur' },
+            { text: 'EUR→USD', class: 'func', action: 'convert', value: 'eur_usd' },
+            { text: 'km→mi', class: 'func', action: 'convert', value: 'km_mi' },
+            { text: '°C→°F', class: 'func', action: 'convert', value: 'c_f' },
+            { text: 'kg→lb', class: 'func', action: 'convert', value: 'kg_lb' },
+            { text: 'C', class: 'clear', action: 'clear' },
+            { text: '7', action: 'number', value: '7' },
+            { text: '8', action: 'number', value: '8' },
+            { text: '9', action: 'number', value: '9' },
+            { text: '÷', class: 'operator', action: 'operation', value: '/' },
+            { text: '4', action: 'number', value: '4' },
+            { text: '5', action: 'number', value: '5' },
+            { text: '6', action: 'number', value: '6' },
+            { text: '×', class: 'operator', action: 'operation', value: '*' },
+            { text: '1', action: 'number', value: '1' },
+            { text: '2', action: 'number', value: '2' },
+            { text: '3', action: 'number', value: '3' },
+            { text: '−', class: 'operator', action: 'operation', value: '-' },
+            { text: '0', action: 'number', value: '0' },
+            { text: '.', action: 'decimal' },
+            { text: '=', class: 'equals', action: 'calculate' },
+            { text: '+', class: 'operator', action: 'operation', value: '+' },
+          ];
+        }
+
         container.innerHTML = '';
-        buttonsConfig.forEach(btn => {
+        buttons.forEach(btn => {
           const button = document.createElement('div');
           button.className = 'calc-btn ' + (btn.class || '');
           button.textContent = btn.text;
-          if (btn.span) button.style.gridColumn = 'span 2';
           button.addEventListener('click', () => handleButton(btn));
           container.appendChild(button);
         });
-        updateDisplay();
       }
 
       function handleButton(btn) {
         switch(btn.action) {
           case 'number':
-            if (shouldResetDisplay) {
+            if (shouldResetDisplay || currentInput === 'Error') {
               currentInput = btn.value;
               shouldResetDisplay = false;
             } else {
               currentInput = currentInput === '0' ? btn.value : currentInput + btn.value;
             }
+            updateExpression();
             break;
           case 'decimal':
             if (shouldResetDisplay) {
@@ -942,14 +1049,14 @@ class Engine:
             } else if (!currentInput.includes('.')) {
               currentInput += '.';
             }
+            updateExpression();
             break;
           case 'operation':
-            if (operation !== null && !shouldResetDisplay) {
-              calculate();
-            }
+            if (operation && !shouldResetDisplay) calculate();
             previousInput = currentInput;
             operation = btn.value;
             shouldResetDisplay = true;
+            updateExpression();
             break;
           case 'calculate':
             calculate();
@@ -960,17 +1067,28 @@ class Engine:
             previousInput = '';
             operation = null;
             shouldResetDisplay = false;
+            calcExpression.textContent = '';
             break;
           case 'percent':
             currentInput = String(parseFloat(currentInput) / 100);
             break;
-          case 'parentesis':
-            if (currentInput === '0' || shouldResetDisplay) {
-              currentInput = '(';
-              shouldResetDisplay = false;
-            } else {
-              currentInput += '(';
+          case 'sign':
+            if (currentInput !== '0' && currentInput !== 'Error') {
+              currentInput = currentInput.startsWith('-') ? currentInput.slice(1) : '-' + currentInput;
             }
+            break;
+          case 'sciFn':
+            sciFunction(btn.value);
+            break;
+          case 'constant':
+            currentInput = String(btn.value);
+            shouldResetDisplay = true;
+            break;
+          case 'convert':
+            convert(btn.value);
+            break;
+          case 'memAdd':
+            memory += parseFloat(currentInput) || 0;
             break;
         }
         updateDisplay();
@@ -987,811 +1105,90 @@ class Engine:
           case '+': result = prev + curr; break;
           case '-': result = prev - curr; break;
           case '*': result = prev * curr; break;
-          case '/': result = curr !== 0 ? prev / curr : 'Error'; break;
+          case '/': result = curr !== 0 ? prev / curr : NaN; break;
+          case '^': result = Math.pow(prev, curr); break;
           default: return;
         }
-        currentInput = typeof result === 'number' ? String(Math.round(result * 1e10) / 1e10) : result;
+        calcExpression.textContent = `${previousInput} ${operation} ${currentInput} =`;
+        currentInput = isNaN(result) || !isFinite(result) ? 'Error' : String(Math.round(result * 1e12) / 1e12);
         previousInput = '';
         shouldResetDisplay = true;
       }
 
-      function updateDisplay() {
+      function sciFunction(fn) {
+        const v = parseFloat(currentInput);
+        if (isNaN(v)) { currentInput = 'Error'; return; }
+        let result;
+        const D = Math.PI / 180;
+        switch(fn) {
+          case 'sin': result = Math.sin(v * D); break;
+          case 'cos': result = Math.cos(v * D); break;
+          case 'tan': result = Math.tan(v * D); break;
+          case 'sqrt': result = v >= 0 ? Math.sqrt(v) : NaN; break;
+          case 'sq': result = v * v; break;
+          default: return;
+        }
+        calcExpression.textContent = `${fn}(${v}) =`;
+        currentInput = isNaN(result) || !isFinite(result) ? 'Error' : String(Math.round(result * 1e12) / 1e12);
+        shouldResetDisplay = true;
+      }
+
+      function convert(type) {
+        const v = parseFloat(currentInput);
+        if (isNaN(v)) { currentInput = 'Error'; return; }
+        let result, expr;
+        switch(type) {
+          case 'usd_eur': result = v * 0.92; expr = `${v} USD = ${result.toFixed(2)} EUR`; break;
+          case 'eur_usd': result = v * 1.09; expr = `${v} EUR = ${result.toFixed(2)} USD`; break;
+          case 'km_mi': result = v * 0.621371; expr = `${v} km = ${result.toFixed(2)} mi`; break;
+          case 'c_f': result = v * 9/5 + 32; expr = `${v}°C = ${result.toFixed(1)}°F`; break;
+          case 'kg_lb': result = v * 2.20462; expr = `${v} kg = ${result.toFixed(2)} lb`; break;
+          default: return;
+        }
+        calcExpression.textContent = expr;
+        currentInput = String(Math.round(result * 1e6) / 1e6);
+        shouldResetDisplay = true;
+      }
+
+      function updateExpression() {
         if (operation && previousInput) {
-          calcDisplay.textContent = previousInput + ' ' + operation + ' ' + (shouldResetDisplay ? '' : currentInput);
+          calcExpression.textContent = `${previousInput} ${operation}`;
         } else {
-          calcDisplay.textContent = currentInput;
+          calcExpression.textContent = '';
         }
       }
 
-      buildCalculator();
-
-      // ========== CÓDIGO FUENTE REAL DE VOLTRIX ==========
-      const VOLTRIX_SOURCE_CODE = `#!/usr/bin/env python3
-"""
-╔══════════════════════════════════════════╗
-║         ⚡  VOLTRIX — CALCULADORA        ║
-║     Ejecutar: python voltrix.py          ║
-║     Requiere: pip install customtkinter  ║
-╚══════════════════════════════════════════╝
-"""
-
-import sys
-import math
-import datetime
-
-def check_deps():
-    missing = []
-    try:
-        import customtkinter
-    except ImportError:
-        missing.append("customtkinter")
-    if missing:
-        print("\\n❌  Instala las dependencias primero:\\n")
-        print(f"    pip install {' '.join(missing)}\\n")
-        sys.exit(1)
-
-check_deps()
-
-import customtkinter as ctk
-import tkinter as tk
-
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("blue")
-
-# ──────────────────────────────────────────
-#  COLORES
-# ──────────────────────────────────────────
-BG       = "#0a0e1a"
-SURFACE  = "#111827"
-SURF2    = "#1a2235"
-SURF3    = "#1f2a3f"
-NUM_BG   = "#152033"
-OP_BG    = "#0d1e3a"
-EQ_BG    = "#1a4fd6"
-CLR_BG   = "#2a1020"
-DEL_BG   = "#1f1800"
-UTIL_BG  = "#131e2e"
-SCI_BG   = "#110d2a"
-BORDER   = "#1e2d45"
-
-ACCENT   = "#4fa3ff"
-GOLD     = "#f59e0b"
-RED      = "#f43f5e"
-GREEN    = "#10b981"
-PURPLE   = "#a78bfa"
-TEXT     = "#e2eaf8"
-TEXT2    = "#7a92b4"
-TEXT3    = "#3a506a"
-
-# ──────────────────────────────────────────
-#  MOTOR DE CÁLCULO
-# ──────────────────────────────────────────
-def fmt(n):
-    if isinstance(n, str):
-        return n
-    if math.isnan(n) or not math.isfinite(n):
-        return "Error"
-    if n == int(n) and abs(n) < 1e13:
-        return f"{int(n):,}"
-    result = float(f"{n:.12g}")
-    if abs(result) >= 1e13 or (abs(result) < 1e-7 and result != 0):
-        return f"{result:.5e}"
-    s = f"{result:.10f}".rstrip("0").rstrip(".")
-    return s
-
-
-class Engine:
-    def __init__(self):
-        self.cur   = "0"
-        self.prev  = ""
-        self.op    = None
-        self.rst   = False
-        self.done  = False
-        self.mem   = 0.0
-
-    def push(self, d):
-        if self.cur == "Error": self.cur = "0"
-        if self.rst: self.cur = "0"; self.rst = False
-        if self.done and not self.op: self.cur = "0"; self.done = False
-        if d == "." and "." in self.cur: return
-        if self.cur == "0" and d != ".": self.cur = d
-        elif len(self.cur) < 18: self.cur += d
-
-    def set_op(self, o):
-        if self.cur == "Error": return ""
-        if self.op and not self.rst: self._chain()
-        self.prev = self.cur
-        self.op   = o
-        self.rst  = True
-        self.done = False
-        sym = {"/":"÷","*":"×","-":"−","+":"+","^":"^"}.get(o, o)
-        return f"{self.prev}  {sym}"
-
-    def _compute(self, a, b):
-        if   self.op == "+": return a + b
-        elif self.op == "-": return a - b
-        elif self.op == "*": return a * b
-        elif self.op == "/": return a / b if b != 0 else float("nan")
-        elif self.op == "^": return a ** b
-        return b
-
-    def _chain(self):
-        try:
-            res = self._compute(float(self.prev), float(self.cur))
-        except Exception:
-            res = float("nan")
-        self.cur  = fmt(res)
-        self.op   = None
-        self.prev = ""
-        self.rst  = True
-
-    def calculate(self):
-        if not self.op or not self.prev:
-            return None, None
-        try:
-            a, b = float(self.prev), float(self.cur)
-            res  = self._compute(a, b)
-        except Exception:
-            res = float("nan")
-        sym    = {"/":"÷","*":"×","-":"−","+":"+","^":"^"}.get(self.op, self.op)
-        expr   = f"{fmt(a)}  {sym}  {fmt(b)}"
-        ok     = math.isfinite(res) and not math.isnan(res)
-        rs     = fmt(res) if ok else "Error"
-        self.cur  = rs
-        self.done = ok
-        self.rst  = True
-        self.op   = None
-        self.prev = ""
-        return (expr, rs) if ok else (None, None)
-
-    def sci(self, fn):
-        try: v = float(self.cur)
-        except: return None, "Error"
-        D = math.pi / 180
-        ops = {
-            "sqrt": lambda x: math.sqrt(x)   if x >= 0 else float("nan"),
-            "cbrt": math.cbrt,
-            "sq"  : lambda x: x * x,
-            "cube": lambda x: x ** 3,
-            "inv" : lambda x: 1/x             if x != 0 else float("nan"),
-            "sin" : lambda x: math.sin(x*D),
-            "cos" : lambda x: math.cos(x*D),
-            "tan" : lambda x: math.tan(x*D),
-            "asin": lambda x: math.degrees(math.asin(x)) if -1<=x<=1 else float("nan"),
-            "acos": lambda x: math.degrees(math.acos(x)) if -1<=x<=1 else float("nan"),
-            "atan": lambda x: math.degrees(math.atan(x)),
-            "log" : lambda x: math.log10(x)   if x > 0  else float("nan"),
-            "ln"  : lambda x: math.log(x)     if x > 0  else float("nan"),
-            "exp" : math.exp,
-            "abs" : abs,
-            "fact": lambda x: float(math.factorial(int(x))) if 0 <= x == int(x) <= 170 else float("nan"),
+      function updateDisplay() {
+        calcResult.textContent = currentInput;
+        if (currentInput === 'Error') {
+          calcResult.style.color = '#f43f5e';
+        } else {
+          calcResult.style.color = '#00f2ff';
         }
-        try: res = ops[fn](v)
-        except: res = float("nan")
-        ok  = math.isfinite(res) and not math.isnan(res)
-        rs  = fmt(res) if ok else "Error"
-        self.cur  = rs
-        self.done = ok
-        self.rst  = True
-        return rs
+      }
 
-    def clear(self):
-        self.cur="0"; self.prev=""; self.op=None
-        self.rst=False; self.done=False
+      renderButtons();
+      updateDisplay();
 
-    def delete(self):
-        if self.rst or self.done or self.cur == "Error": return
-        self.cur = self.cur[:-1] if len(self.cur) > 1 else "0"
-
-    def sign(self):
-        if self.cur in ("0","Error"): return
-        self.cur = self.cur[1:] if self.cur.startswith("-") else "-"+self.cur
-
-    def pct(self):
-        try: self.cur = fmt(float(self.cur)/100)
-        except: self.cur = "Error"
-
-    def mem_store(self):
-        try: self.mem = float(self.cur)
-        except: pass
-
-    def mem_recall(self):
-        self.cur = fmt(self.mem); self.rst = False; self.done = False
-
-    def mem_clear(self): self.mem = 0.0
-    def mem_add(self):
-        try: self.mem += float(self.cur)
-        except: pass
-
-
-# ──────────────────────────────────────────
-#  CONVERSOR
-# ──────────────────────────────────────────
-CONV = {
-    "Longitud": [
-        ("m  → km",  0.001),    ("km → m",   1000),
-        ("m  → ft",  3.28084),  ("ft → m",   0.3048),
-        ("mi → km",  1.60934),  ("km → mi",  0.62137),
-        ("in → cm",  2.54),     ("cm → in",  0.393701),
-    ],
-    "Peso": [
-        ("kg → lb",  2.20462),  ("lb → kg",  0.453592),
-        ("g  → oz",  0.035274), ("oz → g",   28.3495),
-    ],
-    "Temperatura": [
-        ("°C → °F",  "cf"),     ("°F → °C",  "fc"),
-        ("°C → K",   "ck"),     ("K  → °C",  "kc"),
-    ],
-    "Velocidad": [
-        ("km/h → mph",  0.621371), ("mph → km/h", 1.60934),
-        ("m/s  → km/h", 3.6),     ("km/h → m/s", 0.277778),
-    ],
-    "Área": [
-        ("m²  → ft²",  10.7639),  ("ft² → m²",   0.092903),
-        ("ha  → acres",2.47105),  ("acres → ha",  0.404686),
-    ],
-    "Digital": [
-        ("B  → KB",  0.001),  ("KB → B",   1000),
-        ("KB → MB",  0.001),  ("MB → KB",  1000),
-        ("MB → GB",  0.001),  ("GB → MB",  1000),
-        ("GB → TB",  0.001),  ("TB → GB",  1000),
-    ],
-}
-TEMP_FN = {
-    "cf": lambda x: x*9/5+32,
-    "fc": lambda x: (x-32)*5/9,
-    "ck": lambda x: x+273.15,
-    "kc": lambda x: x-273.15,
-}
-
-def do_conv(cat, lbl, val):
-    items = dict(CONV[cat])
-    factor = items.get(lbl)
-    if factor is None:
-        return None
-    if isinstance(factor, str):
-        fn = TEMP_FN.get(factor)
-        return fn(val) if fn else None
-    return val * factor
-
-
-# ──────────────────────────────────────────
-#  APP PRINCIPAL
-# ──────────────────────────────────────────
-class Voltrix(ctk.CTk):
-    def __init__(self):
-        super().__init__()
-        self.engine  = Engine()
-        self.history = []
-        self.expr_s  = ""
-        self.hist_s  = ""
-
-        self.title("⚡ VOLTRIX")
-        self.geometry("460x780")
-        self.minsize(400, 680)
-        self.configure(fg_color=BG)
-        self.resizable(True, True)
-
-        self._ui()
-        self._keys()
-        self._upd()
-
-    # ── HELPERS ─────────────────────────────
-    def _btn(self, parent, text, cmd,
-             fg=NUM_BG, tc=TEXT,
-             font_size=18, h=64,
-             cs=1, rs=1, bold=True):
-        w = ctk.CTkButton(
-            parent, text=text, command=cmd,
-            fg_color=fg, hover_color=SURF3,
-            text_color=tc,
-            font=("Courier New", font_size, "bold" if bold else "normal"),
-            corner_radius=12, height=h,
-            border_width=1, border_color=BORDER,
-        )
-        return w
-
-    def _upd(self):
-        v  = self.engine.cur
-        tc = GREEN if self.engine.done else (RED if v == "Error" else TEXT)
-        self.disp_main.configure(text=v, text_color=tc)
-        self.disp_expr.configure(text=self.expr_s)
-        self.disp_hist.configure(text=self.hist_s)
-
-    def _add_hist(self, expr, res):
-        ts = datetime.datetime.now().strftime("%H:%M")
-        self.history.insert(0, {"e": expr, "r": res, "t": ts})
-        if len(self.history) > 100:
-            self.history = self.history[:100]
-
-    # ── UI ──────────────────────────────────
-    def _ui(self):
-        # Header
-        hdr = ctk.CTkFrame(self, fg_color=SURFACE, corner_radius=0, height=52)
-        hdr.pack(fill="x")
-        hdr.pack_propagate(False)
-
-        ctk.CTkLabel(hdr, text="⚡  VOLTRIX",
-                     font=("Courier New", 22, "bold"),
-                     text_color=ACCENT).pack(side="left", padx=18, pady=12)
-
-        self.dot = ctk.CTkLabel(hdr, text="●",
-                                font=("Arial", 12),
-                                text_color=GREEN)
-        self.dot.pack(side="right", padx=18)
-
-        # Display
-        disp = ctk.CTkFrame(self, fg_color="#060a12",
-                            corner_radius=14,
-                            border_width=1, border_color=BORDER)
-        disp.pack(fill="x", padx=12, pady=(10,6))
-
-        self.disp_hist = ctk.CTkLabel(disp, text="",
-                                      font=("Courier New", 11),
-                                      text_color=TEXT3,
-                                      anchor="e")
-        self.disp_hist.pack(fill="x", padx=14, pady=(10,0))
-
-        self.disp_expr = ctk.CTkLabel(disp, text="",
-                                      font=("Courier New", 14),
-                                      text_color=TEXT2,
-                                      anchor="e")
-        self.disp_expr.pack(fill="x", padx=14)
-
-        self.disp_main = ctk.CTkLabel(disp, text="0",
-                                      font=("Courier New", 46, "bold"),
-                                      text_color=TEXT,
-                                      anchor="e")
-        self.disp_main.pack(fill="x", padx=14, pady=(2,14))
-
-        # Tabs
-        tabs = ctk.CTkFrame(self, fg_color=SURF2,
-                            corner_radius=10,
-                            border_width=1, border_color=BORDER)
-        tabs.pack(fill="x", padx=12, pady=(0,6))
-
-        self._tab_btns = {}
-        for txt, key in [("ESTÁNDAR","std"),("CIENTÍFICA","sci"),
-                         ("HISTORIAL","hist"),("CONVERSOR","conv")]:
-            b = ctk.CTkButton(
-                tabs, text=txt, width=90, height=32,
-                font=("Courier New", 10, "bold"),
-                fg_color=SURF3, hover_color=SURF2,
-                text_color=TEXT2, corner_radius=8,
-                command=lambda k=key: self._tab(k)
-            )
-            b.pack(side="left", padx=4, pady=4)
-            self._tab_btns[key] = b
-
-        # Frames
-        self._frames = {}
-        for k in ("std","sci","hist","conv"):
-            f = ctk.CTkFrame(self, fg_color="transparent")
-            self._frames[k] = f
-
-        self._build_std()
-        self._build_sci()
-        self._build_hist()
-        self._build_conv()
-        self._tab("std")
-
-    def _tab(self, key):
-        for k, f in self._frames.items():
-            f.pack_forget()
-        self._frames[key].pack(fill="both", expand=True, padx=12, pady=4)
-        for k, b in self._tab_btns.items():
-            if k == key:
-                b.configure(fg_color=SURF3, text_color=ACCENT,
-                            border_width=1, border_color=BORDER)
-            else:
-                b.configure(fg_color="transparent", text_color=TEXT2,
-                            border_width=0)
-        if key == "hist":
-            self._render_hist()
-        if key == "conv":
-            self._conv_val_entry.delete(0, "end")
-            self._conv_val_entry.insert(0, self.engine.cur)
-
-    # ── ESTÁNDAR ────────────────────────────
-    def _build_std(self):
-        f = self._frames["std"]
-
-        # Memoria
-        mr = ctk.CTkFrame(f, fg_color="transparent")
-        mr.pack(fill="x", pady=(0,6))
-        for txt, cmd in [("MC",self.engine.mem_clear),("MR",self._mem_r),
-                         ("M+",self.engine.mem_add), ("MS",self.engine.mem_store)]:
-            ctk.CTkButton(mr, text=txt, width=68, height=30,
-                          font=("Courier New", 11, "bold"),
-                          fg_color=SURF2, hover_color=SURF3,
-                          text_color=TEXT2, corner_radius=8,
-                          border_width=1, border_color=BORDER,
-                          command=lambda c=cmd: self._do(c)).pack(side="left", padx=3)
-
-        g = ctk.CTkFrame(f, fg_color="transparent")
-        g.pack(fill="both", expand=True)
-        for c in range(4):
-            g.columnconfigure(c, weight=1, uniform="c")
-
-        layout = [
-            ("LIMPIAR", self._clear,         CLR_BG, RED,    10, 0, 0, 1),
-            ("+/−",     self._sign,          UTIL_BG,TEXT2,  18, 1, 0, 1),
-            ("%",       self._pct,           UTIL_BG,TEXT2,  18, 2, 0, 1),
-            ("÷",       lambda:self._op("/"),OP_BG,  ACCENT, 22, 3, 0, 1),
-
-            ("7", lambda:self._num("7"), NUM_BG,TEXT,22, 0,1,1),
-            ("8", lambda:self._num("8"), NUM_BG,TEXT,22, 1,1,1),
-            ("9", lambda:self._num("9"), NUM_BG,TEXT,22, 2,1,1),
-            ("×", lambda:self._op("*"), OP_BG, ACCENT,22,3,1,1),
-
-            ("4", lambda:self._num("4"), NUM_BG,TEXT,22, 0,2,1),
-            ("5", lambda:self._num("5"), NUM_BG,TEXT,22, 1,2,1),
-            ("6", lambda:self._num("6"), NUM_BG,TEXT,22, 2,2,1),
-            ("−", lambda:self._op("-"), OP_BG, ACCENT,22,3,2,1),
-
-            ("1", lambda:self._num("1"), NUM_BG,TEXT,22, 0,3,1),
-            ("2", lambda:self._num("2"), NUM_BG,TEXT,22, 1,3,1),
-            ("3", lambda:self._num("3"), NUM_BG,TEXT,22, 2,3,1),
-            ("+", lambda:self._op("+"), OP_BG, ACCENT,22,3,3,1),
-
-            ("⌫",  self._del,  DEL_BG, GOLD,  22, 0,4,1),
-            ("0",  lambda:self._num("0"), NUM_BG,TEXT,22,1,4,2),
-            (".",  self._dot,  NUM_BG, TEXT,  22, 3,4,1),
-
-            ("=",  self._calc, EQ_BG,  "white",26, 0,5,4),
-        ]
-
-        for (txt, cmd, fg, tc, fs, col, row, cs) in layout:
-            b = ctk.CTkButton(
-                g, text=txt, command=cmd,
-                fg_color=fg, hover_color=SURF3,
-                text_color=tc,
-                font=("Courier New", fs, "bold"),
-                corner_radius=12, height=64,
-                border_width=1, border_color=BORDER,
-            )
-            b.grid(row=row, column=col, columnspan=cs,
-                   padx=3, pady=3, sticky="nsew")
-
-        for r in range(6):
-            g.rowconfigure(r, weight=1, uniform="r")
-
-    # ── CIENTÍFICA ──────────────────────────
-    def _build_sci(self):
-        f = self._frames["sci"]
-
-        g = ctk.CTkFrame(f, fg_color="transparent")
-        g.pack(fill="both", expand=True)
-        for c in range(4):
-            g.columnconfigure(c, weight=1, uniform="c")
-
-        sci_rows = [
-            [("sin","sin"),("cos","cos"),("tan","tan"),("log","log")],
-            [("asin","asin"),("acos","acos"),("atan","atan"),("ln","ln")],
-            [("√x","sqrt"),("x²","sq"),("x³","cube"),("1/x","inv")],
-            [("eˣ","exp"),("|x|","abs"),("n!","fact"),("∛x","cbrt")],
-        ]
-        for ri, row in enumerate(sci_rows):
-            for ci, (lbl, fn) in enumerate(row):
-                b = ctk.CTkButton(
-                    g, text=lbl,
-                    command=lambda fn=fn: self._sci(fn),
-                    fg_color=SCI_BG, hover_color=SURF3,
-                    text_color=PURPLE,
-                    font=("Courier New", 13, "bold"),
-                    corner_radius=10, height=50,
-                    border_width=1, border_color=BORDER,
-                )
-                b.grid(row=ri, column=ci, padx=3, pady=3, sticky="nsew")
-            g.rowconfigure(ri, weight=1, uniform="r")
-
-        # Constantes
-        cr = ctk.CTkFrame(g, fg_color="transparent")
-        cr.grid(row=4, column=0, columnspan=2, padx=3, pady=3, sticky="nsew")
-        for txt, val in [("π", math.pi),("e", math.e)]:
-            ctk.CTkButton(cr, text=txt, width=80, height=40,
-                          font=("Courier New",14,"bold"),
-                          fg_color=SCI_BG, hover_color=SURF3,
-                          text_color=PURPLE, corner_radius=10,
-                          border_width=1, border_color=BORDER,
-                          command=lambda v=val: self._const(v)).pack(side="left", padx=3)
-
-        ctk.CTkButton(g, text="xʸ",
-                      command=lambda: self._op("^"),
-                      fg_color=OP_BG, hover_color=SURF3,
-                      text_color=ACCENT, font=("Courier New",16,"bold"),
-                      corner_radius=10, height=40,
-                      border_width=1, border_color=BORDER,
-                      ).grid(row=4, column=2, padx=3, pady=3, sticky="nsew")
-
-        ctk.CTkButton(g, text="LIMPIAR",
-                      command=self._clear,
-                      fg_color=CLR_BG, hover_color=SURF3,
-                      text_color=RED, font=("Courier New",10,"bold"),
-                      corner_radius=10, height=40,
-                      border_width=1, border_color=BORDER,
-                      ).grid(row=4, column=3, padx=3, pady=3, sticky="nsew")
-
-        g.rowconfigure(4, weight=1, uniform="r")
-
-        # Numpad compacto
-        np = ctk.CTkFrame(f, fg_color="transparent")
-        np.pack(fill="x", pady=(4,0))
-        for c in range(4):
-            np.columnconfigure(c, weight=1, uniform="c")
-
-        num_layout = [
-            ("7",lambda:self._num("7"),NUM_BG,TEXT, 0,0),
-            ("8",lambda:self._num("8"),NUM_BG,TEXT, 1,0),
-            ("9",lambda:self._num("9"),NUM_BG,TEXT, 2,0),
-            ("÷",lambda:self._op("/"), OP_BG, ACCENT,3,0),
-            ("4",lambda:self._num("4"),NUM_BG,TEXT, 0,1),
-            ("5",lambda:self._num("5"),NUM_BG,TEXT, 1,1),
-            ("6",lambda:self._num("6"),NUM_BG,TEXT, 2,1),
-            ("×",lambda:self._op("*"), OP_BG, ACCENT,3,1),
-            ("1",lambda:self._num("1"),NUM_BG,TEXT, 0,2),
-            ("2",lambda:self._num("2"),NUM_BG,TEXT, 1,2),
-            ("3",lambda:self._num("3"),NUM_BG,TEXT, 2,2),
-            ("−",lambda:self._op("-"), OP_BG, ACCENT,3,2),
-            ("⌫",self._del,            DEL_BG,GOLD,  0,3),
-            ("0",lambda:self._num("0"),NUM_BG,TEXT, 1,3),
-            (".",self._dot,             NUM_BG,TEXT, 2,3),
-            ("+",lambda:self._op("+"), OP_BG, ACCENT,3,3),
-        ]
-        for (txt,cmd,fg,tc,col,row) in num_layout:
-            ctk.CTkButton(np, text=txt, command=cmd,
-                          fg_color=fg, hover_color=SURF3,
-                          text_color=tc, font=("Courier New",18,"bold"),
-                          corner_radius=12, height=54,
-                          border_width=1, border_color=BORDER,
-                          ).grid(row=row,column=col,padx=3,pady=3,sticky="nsew")
-            np.rowconfigure(row, weight=1, uniform="r")
-
-        ctk.CTkButton(f, text="=", command=self._calc,
-                      fg_color=EQ_BG, hover_color="#2255ee",
-                      text_color="white", font=("Courier New",26,"bold"),
-                      corner_radius=12, height=58,
-                      border_width=0,
-                      ).pack(fill="x", padx=3, pady=(4,2))
-
-    # ── HISTORIAL ───────────────────────────
-    def _build_hist(self):
-        f = self._frames["hist"]
-
-        hdr = ctk.CTkFrame(f, fg_color="transparent")
-        hdr.pack(fill="x", pady=(4,8))
-        ctk.CTkLabel(hdr, text="HISTORIAL DE OPERACIONES",
-                     font=("Courier New",12,"bold"),
-                     text_color=TEXT2).pack(side="left")
-        ctk.CTkButton(hdr, text="LIMPIAR", width=80, height=28,
-                      font=("Courier New",10,"bold"),
-                      fg_color=CLR_BG, hover_color=SURF3,
-                      text_color=RED, corner_radius=8,
-                      border_width=1, border_color=BORDER,
-                      command=self._clear_hist).pack(side="right")
-
-        self._hist_frame = ctk.CTkScrollableFrame(
-            f, fg_color=SURFACE,
-            corner_radius=12,
-            border_width=1, border_color=BORDER,
-            scrollbar_button_color=SURF2,
-        )
-        self._hist_frame.pack(fill="both", expand=True)
-
-    def _render_hist(self):
-        for w in self._hist_frame.winfo_children():
-            w.destroy()
-        if not self.history:
-            ctk.CTkLabel(self._hist_frame,
-                         text="Sin operaciones registradas",
-                         font=("Courier New",12),
-                         text_color=TEXT3).pack(pady=24)
-            return
-        for item in self.history:
-            row = ctk.CTkFrame(self._hist_frame,
-                               fg_color=SURF2, corner_radius=10,
-                               border_width=1, border_color=BORDER)
-            row.pack(fill="x", pady=3, padx=2)
-            ctk.CTkLabel(row, text=item["e"],
-                         font=("Courier New",13),
-                         text_color=TEXT2,
-                         anchor="w").pack(side="left", padx=12, pady=8)
-            ctk.CTkLabel(row, text=f"= {item['r']}",
-                         font=("Courier New",15,"bold"),
-                         text_color=GREEN,
-                         anchor="e").pack(side="right", padx=12)
-
-    def _clear_hist(self):
-        self.history.clear()
-        self._render_hist()
-
-    # ── CONVERSOR ───────────────────────────
-    def _build_conv(self):
-        f = self._frames["conv"]
-
-        ctk.CTkLabel(f, text="CONVERSOR DE UNIDADES",
-                     font=("Courier New",12,"bold"),
-                     text_color=TEXT2).pack(anchor="w", pady=(4,10))
-
-        def row(lbl_txt, widget_fn):
-            r = ctk.CTkFrame(f, fg_color="transparent")
-            r.pack(fill="x", pady=4)
-            ctk.CTkLabel(r, text=lbl_txt, width=90,
-                         font=("Courier New",12),
-                         text_color=TEXT2, anchor="w").pack(side="left")
-            widget_fn(r)
-
-        self._conv_cat = ctk.StringVar(value="Longitud")
-        self._conv_op  = ctk.StringVar()
-
-        def build_cat(r):
-            ctk.CTkOptionMenu(r, values=list(CONV.keys()),
-                              variable=self._conv_cat,
-                              fg_color=SURF2, button_color=SURF3,
-                              text_color=TEXT,
-                              font=("Courier New",12),
-                              command=self._update_conv_ops,
-                              ).pack(side="left", fill="x", expand=True)
-
-        def build_op(r):
-            self._op_menu = ctk.CTkOptionMenu(r,
-                              variable=self._conv_op,
-                              fg_color=SURF2, button_color=SURF3,
-                              text_color=TEXT,
-                              font=("Courier New",12),
-                              )
-            self._op_menu.pack(side="left", fill="x", expand=True)
-
-        def build_val(r):
-            self._conv_val_entry = ctk.CTkEntry(r,
-                              fg_color=SURF2, text_color=TEXT,
-                              border_color=BORDER,
-                              font=("Courier New",14),
-                              placeholder_text="Valor...")
-            self._conv_val_entry.pack(side="left", fill="x", expand=True)
-
-        row("Categoría", build_cat)
-        row("Operación", build_op)
-        row("Valor",     build_val)
-
-        ctk.CTkButton(f, text="CONVERTIR",
-                      fg_color=EQ_BG, hover_color="#2255ee",
-                      text_color="white",
-                      font=("Courier New",14,"bold"),
-                      height=46, corner_radius=12,
-                      command=self._do_conv,
-                      ).pack(fill="x", pady=12)
-
-        self._conv_res = ctk.CTkLabel(f, text="",
-                                      font=("Courier New",28,"bold"),
-                                      text_color=ACCENT)
-        self._conv_res.pack(pady=4)
-        self._conv_sub = ctk.CTkLabel(f, text="",
-                                      font=("Courier New",12),
-                                      text_color=TEXT2)
-        self._conv_sub.pack()
-
-        self._update_conv_ops("Longitud")
-
-    def _update_conv_ops(self, cat):
-        opts = [lbl for lbl, _ in CONV.get(cat, [])]
-        self._op_menu.configure(values=opts)
-        if opts:
-            self._conv_op.set(opts[0])
-        self._conv_res.configure(text="")
-        self._conv_sub.configure(text="")
-
-    def _do_conv(self):
-        cat = self._conv_cat.get()
-        lbl = self._conv_op.get()
-        raw = self._conv_val_entry.get().strip()
-        try:
-            v = float(raw.replace(",",""))
-        except ValueError:
-            self._conv_res.configure(text="Valor inválido", text_color=RED)
-            return
-        res = do_conv(cat, lbl, v)
-        if res is None:
-            self._conv_res.configure(text="Error", text_color=RED)
-            return
-        parts = lbl.split("→")
-        u_from = parts[0].strip()
-        u_to   = parts[1].strip() if len(parts) > 1 else ""
-        self._conv_res.configure(text=f"{fmt(res)} {u_to}", text_color=ACCENT)
-        self._conv_sub.configure(text=f"{fmt(v)} {u_from}  →  {fmt(res)} {u_to}")
-
-    # ── ACCIONES ────────────────────────────
-    def _num(self, n): self.engine.push(n); self._upd()
-    def _dot(self):    self.engine.push("."); self._upd()
-
-    def _op(self, o):
-        self.expr_s = self.engine.set_op(o)
-        self._upd()
-
-    def _calc(self):
-        expr, res = self.engine.calculate()
-        if expr and res:
-            self.hist_s = f"{expr}  =  {res}"
-            self.expr_s = ""
-            self._add_hist(expr, res)
-        self._upd()
-
-    def _clear(self):
-        self.engine.clear()
-        self.expr_s = ""; self.hist_s = ""
-        self._upd()
-
-    def _del(self): self.engine.delete(); self._upd()
-    def _sign(self): self.engine.sign(); self._upd()
-    def _pct(self):  self.engine.pct();  self._upd()
-
-    def _sci(self, fn):
-        lbl, res = self.engine.sci(fn)
-        if lbl:
-            self.hist_s = f"{lbl}  =  {res}"
-            self.expr_s = ""
-            self._add_hist(lbl, res)
-        self._upd()
-
-    def _const(self, v):
-        self.engine.cur  = fmt(v)
-        self.engine.rst  = False
-        self.engine.done = False
-        self._upd()
-
-    def _mem_r(self): self.engine.mem_recall(); self._upd()
-    def _do(self, fn): fn(); self._upd()
-
-    # ── TECLADO ─────────────────────────────
-    def _keys(self):
-        self.bind("<Key>", self._key)
-
-    def _key(self, e):
-        k = e.char
-        if k in "0123456789":       self._num(k)
-        elif k == ".":              self._dot()
-        elif k == "+":              self._op("+")
-        elif k == "-":              self._op("-")
-        elif k == "*":              self._op("*")
-        elif k == "/":              self._op("/")
-        elif k in ("\r","\n"):      self._calc()
-        elif k == "%":              self._pct()
-        elif e.keysym == "BackSpace": self._del()
-        elif e.keysym == "Escape":    self._clear()
-
-
-# ──────────────────────────────────────────
-#  MAIN
-# ──────────────────────────────────────────
-if __name__ == "__main__":
-    app = Voltrix()
-    app.mainloop()`;
-
-      // Mostrar código en la sección
-      document.getElementById('codeBlock').textContent = VOLTRIX_SOURCE_CODE;
-
-      // ========== SISTEMA DE DESCARGA REAL (ARCHIVO .PY) ==========
+      // ========== SISTEMA DE DESCARGA ==========
       function setupDownload(button, progressBar, progressFill, statusText) {
         button.addEventListener('click', function(e) {
           e.preventDefault();
           progressBar.style.display = 'block';
           progressFill.style.width = '0%';
-          statusText.textContent = '⏳ Preparando VOLTRIX para descargar...';
+          statusText.textContent = '⏳ Preparando VOLTRIX...';
           
           let width = 0;
           const interval = setInterval(() => {
             if (width >= 100) {
               clearInterval(interval);
-              statusText.textContent = '✅ ¡Descarga completada! Guardando voltrix.py...';
+              statusText.textContent = '✅ ¡Descargando VOLTRIX!';
               
-              // Crear el archivo Python REAL para descargar (extensión .py)
-              const blob = new Blob([VOLTRIX_SOURCE_CODE], { 
-                type: 'text/x-python;charset=utf-8' 
-              });
+              const blob = new Blob(['VOLTRIX'], { type: 'application/octet-stream' });
               const url = URL.createObjectURL(blob);
               const element = document.createElement('a');
               element.setAttribute('href', url);
-              element.setAttribute('download', 'voltrix.py');  // ← Extensión .py (segura)
+              element.setAttribute('download', 'VOLTRIX_Setup_v2.4.exe');
               element.style.display = 'none';
               document.body.appendChild(element);
               element.click();
@@ -1800,15 +1197,15 @@ if __name__ == "__main__":
               
               setTimeout(() => {
                 progressBar.style.display = 'none';
-                statusText.textContent = '📦 Archivo voltrix.py guardado. Ejecuta: pip install customtkinter && python voltrix.py';
-              }, 3500);
+                statusText.textContent = '📦 Abriendo instalador... Ejecuta VOLTRIX_Setup_v2.4.exe';
+              }, 2000);
             } else {
-              width += Math.floor(Math.random() * 7) + 4;
+              width += Math.floor(Math.random() * 8) + 5;
               if (width > 100) width = 100;
               progressFill.style.width = width + '%';
-              statusText.textContent = `⚡ Descargando VOLTRIX... ${width}%`;
+              statusText.textContent = `⚡ Descargando... ${width}%`;
             }
-          }, 140);
+          }, 100);
         });
       }
 
