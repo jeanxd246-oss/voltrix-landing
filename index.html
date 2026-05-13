@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>VOLTRIX | Herramienta computacional definitiva</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========== RESET & BASE ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-deep: #020408;
+      --cyan-neon: #00f2ff;
+      --blue-electric: #0066ff;
+      --purple-soft: #7b2ff7;
+      --white-pure: #ffffff;
+      --glass-bg: rgba(8, 18, 28, 0.45);
+      --glass-border: rgba(0, 255, 255, 0.15);
+      --glow-cyan: 0 0 25px rgba(0, 242, 255, 0.7);
+      --glow-blue: 0 0 35px rgba(0, 102, 255, 0.6);
+      --font-orbitron: 'Orbitron', sans-serif;
+      --font-rajdhani: 'Rajdhani', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+      --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    body {
+      background: var(--bg-deep);
+      font-family: var(--font-inter);
+      color: #EFF2F8;
+      line-height: 1.4;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-image: 
+        radial-gradient(ellipse at 30% 20%, rgba(0, 242, 255, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 60%, rgba(123, 47, 247, 0.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 80%, rgba(0, 102, 255, 0.05) 0%, transparent 55%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    .orbitron { font-family: var(--font-orbitron); }
+    .rajdhani { font-family: var(--font-rajdhani); }
+    .inter { font-family: var(--font-inter); }
+
+    /* ========== CANVAS DE PARTÍCULAS ========== */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.7;
+      filter: blur(0.5px);
+    }
+
+    /* ========== CONTENEDOR PRINCIPAL ========== */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6rem;
+    }
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(2, 4, 8, 0.7);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+      margin: -1.5rem -2.5rem 0;
+      padding: 1rem 2.5rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .logo:hover {
+      filter: drop-shadow(0 0 20px var(--cyan-neon));
+    }
+    .logo-icon {
+      font-size: 2.8rem;
+      filter: drop-shadow(0 0 18px var(--cyan-neon));
+      color: var(--cyan-neon);
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
+    @keyframes pulse-icon {
+      0%, 100% { filter: drop-shadow(0 0 18px var(--cyan-neon)); }
+      50% { filter: drop-shadow(0 0 28px var(--cyan-neon)) drop-shadow(0 0 40px var(--blue-electric)); }
+    }
+    .logo-text {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.3rem;
+      background: linear-gradient(180deg, #ffffff 0%, #a0e9ff 85%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .nav-link {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #b4c8e0;
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+      position: relative;
+      padding: 0.3rem 0;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--cyan-neon);
+      box-shadow: var(--glow-cyan);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover {
+      color: var(--white-pure);
+      text-shadow: 0 0 15px var(--cyan-neon);
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* ========== HERO SECTION ========== */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 85vh;
+      flex-wrap: wrap;
+      gap: 3rem;
+      padding-top: 2rem;
+    }
+    .hero-content {
+      flex: 1 1 500px;
+      animation: fadeInUp 1s ease-out;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-title {
+      font-size: clamp(5.5rem, 10vw, 8.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      background: linear-gradient(to bottom, #ffffff 15%, #7ad0ff 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(0, 85, 170, 0.8));
+      letter-spacing: 0.25em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .hero-sub {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #bce3ff;
+      margin-bottom: 3rem;
+      letter-spacing: 0.25rem;
+      text-shadow: 0 0 25px rgba(0, 180, 255, 0.5);
+      text-transform: uppercase;
+    }
+    .button-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .btn-primary {
+      background: rgba(0, 20, 40, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid var(--cyan-neon);
+      padding: 1.2rem 3rem;
+      border-radius: 5rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white-pure);
+      cursor: pointer;
+      box-shadow: 0 0 35px rgba(0, 180, 255, 0.55), inset 0 0 20px rgba(0, 242, 255, 0.1);
+      letter-spacing: 0.15em;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: var(--transition-smooth);
+      background: linear-gradient(145deg, rgba(0, 30, 50, 0.8) 0%, rgba(0, 80, 120, 0.45) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.2), transparent);
+      transition: left 0.6s ease;
+    }
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 70px var(--cyan-neon), 0 0 120px rgba(0, 63, 102, 0.8);
+      border-color: var(--white-pure);
+      transform: translateY(-5px);
+      background: rgba(0, 180, 255, 0.25);
+      letter-spacing: 0.2em;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 1rem 2.5rem;
+      border-radius: 5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #d9f0ff;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: var(--transition-smooth);
+      letter-spacing: 0.08em;
+    }
+    .btn-secondary:hover {
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 30px var(--cyan-neon);
+      color: white;
+      transform: translateY(-3px);
+    }
+    .hero-visual {
+      flex: 1 1 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: float-visual 6s ease-in-out infinite;
+    }
+    @keyframes float-visual {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* ========== CALCULADORA FUNCIONAL MEJORADA ========== */
+    .mockup-calculator {
+      width: 420px;
+      height: 580px;
+      background: rgba(8, 18, 28, 0.5);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 5rem;
+      border: 1px solid rgba(0, 255, 255, 0.5);
+      box-shadow: 0 40px 80px rgba(0, 130, 255, 0.45), inset 0 0 80px rgba(0, 200, 255, 0.2);
+      padding: 2.2rem;
+      display: flex;
+      flex-direction: column;
+      transform: rotateY(-3deg) rotateX(2deg);
+      background: linear-gradient(145deg, rgba(18, 30, 45, 0.7) 0%, rgba(0, 20, 35, 0.8) 100%);
+      transition: transform 0.5s ease;
+      position: relative;
+    }
+    .mockup-calculator::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, var(--cyan-neon), var(--purple-soft), var(--blue-electric), var(--cyan-neon));
+      border-radius: 5rem;
+      z-index: -1;
+      opacity: 0.3;
+      filter: blur(15px);
+      animation: border-glow 4s linear infinite;
+    }
+    @keyframes border-glow {
+      0% { filter: blur(15px) hue-rotate(0deg); }
+      100% { filter: blur(15px) hue-rotate(360deg); }
+    }
+    .mockup-calculator:hover {
+      transform: rotateY(-1deg) rotateX(1deg) scale(1.02);
+    }
+    .calc-display {
+      background: #010a12;
+      border-radius: 2.5rem;
+      padding: 1.8rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--cyan-neon);
+      box-shadow: inset 0 0 50px #001e3b, 0 0 20px rgba(0, 242, 255, 0.3);
+      text-align: right;
+      font-size: 2rem;
+      color: var(--cyan-neon);
+      font-family: var(--font-orbitron);
+      min-height: 110px;
+      word-wrap: break-word;
+      overflow-y: auto;
+      letter-spacing: 0.08em;
+      line-height: 1.3;
+      text-shadow: 0 0 15px var(--cyan-neon);
+    }
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem;
+      flex: 1;
+    }
+    .calc-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 255, 200, 0.4);
+      border-radius: 1.6rem;
+      padding: 0.9rem;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: var(--transition-smooth);
+      text-align: center;
+      cursor: pointer;
+      font-family: var(--font-orbitron);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .calc-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 242, 255, 0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .calc-btn:hover::before {
+      opacity: 1;
+    }
+    .calc-btn:hover {
+      background: var(--cyan-neon);
+      color: black;
+      box-shadow: 0 0 35px var(--cyan-neon);
+      border-color: white;
+      transform: translateY(-3px);
+    }
+    .calc-btn:active {
+      transform: scale(0.93);
+    }
+    .calc-btn.operator {
+      border-color: rgba(0, 180, 255, 0.8);
+      color: #00e0ff;
+    }
+    .calc-btn.equals {
+      background: rgba(0, 100, 200, 0.5);
+      border-color: var(--cyan-neon);
+      color: white;
+      grid-column: span 2;
+      font-weight: 800;
+    }
+    .calc-btn.clear {
+      border-color: rgba(255, 100, 100, 0.6);
+      color: #ff6b6b;
+    }
+
+    /* ========== SECCIONES ========== */
+    .section-title {
+      font-size: 2.8rem;
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #e0f0ff;
+      border-left: 6px solid var(--cyan-neon);
+      padding-left: 2rem;
+      text-shadow: 0 0 25px #003756;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 2rem;
+      width: 60px;
+      height: 3px;
+      background: var(--cyan-neon);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2.5rem;
+    }
+    .feature-card {
+      background: rgba(10, 20, 30, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      border-radius: 3rem;
+      padding: 2.8rem 2.2rem;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 242, 255, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    .feature-card:hover {
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 60px rgba(0, 180, 255, 0.7), 0 20px 40px rgba(0,0,0,0.6);
+      transform: translateY(-12px);
+    }
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 0 18px var(--cyan-neon));
+    }
+    .feature-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      color: white;
+      letter-spacing: 0.05em;
+    }
+    .feature-card p {
+      color: #b0c8e0;
+      font-size: 0.95rem;
+    }
+
+    /* ========== SECCIÓN HOLOGRÁFICA MEJORADA ========== */
+    .visual-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      align-items: stretch;
+      justify-content: center;
+      margin: 4rem 0;
+    }
+    .hologram-card {
+      flex: 1 1 300px;
+      min-width: 280px;
+      background: rgba(0, 18, 28, 0.5);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-radius: 3.5rem;
+      border: 1px solid rgba(0, 255, 255, 0.45);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 45px rgba(0, 160, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1.8rem;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+    .hologram-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 20%, rgba(0, 255, 255, 0.2) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hologram-card:hover {
+      transform: translateY(-15px);
+      border-color: var(--white-pure);
+      box-shadow: 0 0 80px #0099ff, 0 30px 70px rgba(0,0,0,0.8);
+    }
+    .holo-icon {
+      font-size: 3.2rem;
+      margin-bottom: 1.2rem;
+      filter: drop-shadow(0 0 25px var(--cyan-neon));
+      z-index: 2;
+    }
+    .holo-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 0 25px var(--cyan-neon);
+      z-index: 2;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.1em;
+    }
+    .holo-display {
+      width: 100%;
+      background: #010f1a;
+      border-radius: 2.2rem;
+      padding: 1.8rem;
+      border: 1px solid var(--cyan-neon);
+      box-shadow: inset 0 0 45px #003f66, 0 0 20px rgba(0, 242, 255, 0.4);
+      z-index: 2;
+      text-align: center;
+      font-family: var(--font-orbitron);
+      color: var(--cyan-neon);
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+      backdrop-filter: blur(5px);
+    }
+    .holo-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 20px var(--cyan-neon);
+    }
+    .holo-input, .holo-select {
+      background: rgba(0, 40, 60, 0.7);
+      border: 1px solid rgba(0, 255, 255, 0.6);
+      border-radius: 2.5rem;
+      padding: 0.9rem 1.5rem;
+      color: white;
+      font-family: var(--font-orbitron);
+      text-align: center;
+      width: 100%;
+      margin-top: 0.8rem;
+      outline: none;
+      font-size: 1rem;
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .holo-input:focus, .holo-select:focus {
+      border-color: white;
+      box-shadow: 0 0 30px var(--cyan-neon), inset 0 0 15px rgba(0, 242, 255, 0.2);
+      background: rgba(0, 60, 80, 0.8);
+    }
+    .holo-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300f2ff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.2rem center;
+    }
+
+    /* ========== DESCARGA ========== */
+    .download-section {
+      display: flex;
+      justify-content: center;
+      margin: 5rem 0;
+      flex-direction: column;
+      align-items: center;
+    }
+    .download-btn {
+      background: radial-gradient(circle at 30% 30%, #003954, #000c14);
+      border: 2px solid var(--cyan-neon);
+      padding: 2.4rem 5.5rem;
+      border-radius: 7rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 0 70px #0066cc, 0 0 120px rgba(0, 102, 255, 0.4);
+      letter-spacing: 0.25em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+    }
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.3), transparent);
+      transition: left 0.7s ease;
+    }
+    .download-btn:hover::before {
+      left: 100%;
+    }
+    .download-btn:hover {
+      box-shadow: 0 0 110px var(--cyan-neon), 0 0 160px rgba(0, 63, 122, 0.9);
+      transform: scale(1.05);
+      background: #002b44;
+      border-color: white;
+    }
+    .progress-bar {
+      width: 450px;
+      max-width: 90%;
+      height: 10px;
+      background: #00161f;
+      border-radius: 10px;
+      margin-top: 2rem;
+      overflow: hidden;
+      display: none;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan-neon), var(--blue-electric));
+      box-shadow: 0 0 25px var(--cyan-neon);
+      transition: width 0.2s ease;
+      border-radius: 10px;
+    }
+    #downloadStatus, #downloadStatus2 {
+      color: var(--cyan-neon);
+      margin-top: 0.8rem;
+      font-family: var(--font-orbitron);
+      letter-spacing: 0.05em;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(0, 255, 255, 0.4);
+      padding-top: 2.5rem;
+      color: #9bb8da;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer .logo-text {
+      font-size: 1.4rem;
+    }
+    .social-icons span {
+      font-size: 1.5rem;
+      margin-left: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .social-icons span:hover {
+      color: var(--cyan-neon);
+      text-shadow: 0 0 20px var(--cyan-neon);
+      transform: translateY(-3px);
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+      .hero-visual {
+        margin-top: 2rem;
+      }
+      .mockup-calculator {
+        width: 340px;
+        height: 500px;
+        transform: none;
+      }
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .nav-links {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .download-btn {
+        padding: 1.8rem 3rem;
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="main-container">
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar">
+      <div class="logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">VOLTRIX</span>
+      </div>
+      <div class="nav-links">
+        <span class="nav-link" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">Inicio</span>
+        <span class="nav-link" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Funciones</span>
+        <span class="nav-link" onclick="document.getElementById('visual').scrollIntoView({behavior:'smooth'})">Holográfica</span>
+        <span class="nav-link" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">Descargar</span>
+      </div>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">VOLTRIX</h1>
+        <p class="hero-sub rajdhani">PRECISIÓN INFINITA · DISEÑO TOTAL</p>
+        <div class="button-group">
+          <button class="btn-primary" id="mainDownloadBtn">
+            <span>⬇️</span> DESCARGAR VOLTRIX
+          </button>
+          <button class="btn-secondary" onclick="document.getElementById('visual').scrollIntoView({behavior:'smooth'})">
+            ⚡ EXPLORAR FUNCIONES
+          </button>
+        </div>
+        <p style="margin-top:2rem; color:#7b9bc0; font-size:0.95rem; letter-spacing:0.05em;">
+          🖥️ Windows · macOS · Linux · v2.4 · Ejecución instantánea
+        </p>
+        <div class="progress-bar" id="progressBar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="downloadStatus"></p>
+      </div>
+      <div class="hero-visual">
+        <div class="mockup-calculator" id="functionalCalc">
+          <div class="calc-display" id="calcDisplay">0</div>
+          <div class="calc-buttons" id="calcButtons"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FUNCIONES ========== -->
+    <section id="features">
+      <h2 class="section-title">CAPACIDADES AVANZADAS</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🧮</div>
+          <h3 class="orbitron">Científica</h3>
+          <p>Trigonometría, logaritmos, matrices complejas.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3 class="orbitron">Conversor IA</h3>
+          <p>Unidades, divisas en tiempo real con precisión.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="orbitron">Precisión</h3>
+          <p>32 decimales, sin errores de redondeo.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="orbitron">Velocidad</h3>
+          <p>Motor optimizado en C++ con respuesta inmediata.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌀</div>
+          <h3 class="orbitron">UI Holográfica</h3>
+          <p>Interfaz glass futurista con efectos dinámicos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3 class="orbitron">Sistema Smart</h3>
+          <p>Historial inteligente y sugerencias predictivas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== INTERFAZ HOLOGRÁFICA ========== -->
+    <section id="visual">
+      <h2 class="section-title">INTERFAZ HOLOGRÁFICA</h2>
+      <div class="visual-showcase">
+        <!-- Conversor de divisas -->
+        <div class="hologram-card">
+          <div class="holo-icon">💱</div>
+          <div class="holo-title">CONVERSOR CUÁNTICO</div>
+          <div class="holo-display">
+            <span id="converterResult" class="holo-value">1 USD = 0.92 EUR</span>
+          </div>
+          <input type="number" id="amountInput" class="holo-input" placeholder="Cantidad" value="1" oninput="updateConverter()">
+          <select id="fromCurrency" class="holo-select" onchange="updateConverter()">
+            <option value="USD">USD - Dólar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - Libra</option>
+            <option value="JPY">JPY - Yen</option>
+            <option value="MXN">MXN - Peso Mexicano</option>
+          </select>
+          <select id="toCurrency" class="holo-select" onchange="updateConverter()">
+            <option value="EUR">EUR - Euro</option>
+            <option value="USD">USD - Dólar</option>
+            <option value="GBP">GBP - Libra</option>
+            <option value="JPY">JPY - Yen</option>
+            <option value="MXN">MXN - Peso Mexicano</option>
+          </select>
+        </div>
+        
+        <!-- Visualizador de funciones -->
+        <div class="hologram-card">
+          <div class="holo-icon">📈</div>
+          <div class="holo-title">VISUALIZADOR f(x)</div>
+          <div class="holo-display" style="padding: 1rem;">
+            <canvas id="functionCanvas" width="220" height="110" style="width:100%; border-radius:1.5rem; background:#010a12;"></canvas>
+          </div>
+          <input type="text" id="functionInput" class="holo-input" placeholder="Ej: sin(x)" value="sin(x)" oninput="drawFunction()">
+          <span style="color:#7baed0; font-size:0.85rem; z-index:2; margin-top:0.3rem;">f(x) =</span>
+        </div>
+        
+        <!-- Calculadora matricial -->
+        <div class="hologram-card">
+          <div class="holo-icon">🧬</div>
+          <div class="holo-title">MATRIZ CUÁNTICA</div>
+          <div class="holo-display">
+            <span id="matrixResult" class="holo-value">det = 1</span>
+          </div>
+          <div style="display:flex; gap:0.6rem; z-index:2; width:100%;">
+            <input type="number" id="matrixA" class="holo-input" placeholder="a" value="1" oninput="calcDeterminant()">
+            <input type="number" id="matrixB" class="holo-input" placeholder="b" value="0" oninput="calcDeterminant()">
+          </div>
+          <div style="display:flex; gap:0.6rem; z-index:2; width:100%; margin-top:0.5rem;">
+            <input type="number" id="matrixC" class="holo-input" placeholder="c" value="0" oninput="calcDeterminant()">
+            <input type="number" id="matrixD" class="holo-input" placeholder="d" value="1" oninput="calcDeterminant()">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== DESCARGA ========== -->
+    <div class="download-section" id="download">
+      <div class="download-btn" id="secondaryDownloadBtn">
+        <span>⬇️</span> DESCARGAR VOLTRIX <span style="font-size:1.1rem;">v2.4</span>
+      </div>
+      <div class="progress-bar" id="progressBar2">
+        <div class="progress-fill" id="progressFill2"></div>
+      </div>
+      <p id="downloadStatus2"></p>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <span class="logo-text">VOLTRIX</span>
+      <span style="font-size:0.95rem; letter-spacing:0.05em;">herramienta computacional del mañana</span>
+      <div class="social-icons">
+        <span>🔵</span>
+        <span>⚪</span>
+        <span>🔷</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      // ========== SISTEMA DE PARTÍCULAS AVANZADO ==========
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [];
+      let mouseX = width / 2, mouseY = height / 2;
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resize);
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+      resize();
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.baseSize = Math.random() * 2.2 + 0.6;
+          this.size = this.baseSize;
+          this.speedX = (Math.random() - 0.5) * 0.4;
+          this.speedY = (Math.random() - 0.5) * 0.4;
+          this.life = 0.6 + Math.random() * 0.9;
+          this.maxLife = this.life;
+          this.colorHue = 180 + Math.floor(Math.random() * 40);
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          this.life -= 0.001;
+          
+          // Interacción con el mouse
+          const dx = this.x - mouseX;
+          const dy = this.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            const force = (150 - dist) / 150;
+            this.x += dx * force * 0.02;
+            this.y += dy * force * 0.02;
+            this.size = this.baseSize + force * 2;
+          } else {
+            this.size = this.baseSize;
+          }
+          
+          if (this.x < 0 || this.x > width || this.y < 0 || this.y > height || this.life <= 0.01) {
+            this.reset();
+            this.life = this.maxLife;
+          }
+        }
+        draw(ctx) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          const alpha = Math.min(this.life, 0.8);
+          ctx.fillStyle = `hsla(${this.colorHue}, 100%, 70%, ${alpha})`;
+          ctx.shadowColor = `hsla(${this.colorHue}, 100%, 70%, 0.8)`;
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      for (let i = 0; i < 130; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.update();
+          p.draw(ctx);
+        });
+        
+        // Líneas de conexión
+        for (let i = 0; i < particles.length; i += 2) {
+          const p1 = particles[i];
+          const p2 = particles[i + 1];
+          if (!p1 || !p2) continue;
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(0, 210, 255, ${0.1 * (1 - dist / 130)})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      // ========== CALCULADORA FUNCIONAL ==========
+      let calcDisplay = document.getElementById('calcDisplay');
+      let currentInput = '0';
+      let previousInput = '';
+      let operation = null;
+      let shouldResetDisplay = false;
+
+      const buttonsConfig = [
+        { text: 'C', class: 'clear', action: 'clear' },
+        { text: '()', action: 'parentesis' },
+        { text: '%', action: 'percent' },
+        { text: '÷', class: 'operator', action: 'operation', value: '/' },
+        { text: '7', action: 'number', value: '7' },
+        { text: '8', action: 'number', value: '8' },
+        { text: '9', action: 'number', value: '9' },
+        { text: '×', class: 'operator', action: 'operation', value: '*' },
+        { text: '4', action: 'number', value: '4' },
+        { text: '5', action: 'number', value: '5' },
+        { text: '6', action: 'number', value: '6' },
+        { text: '−', class: 'operator', action: 'operation', value: '-' },
+        { text: '1', action: 'number', value: '1' },
+        { text: '2', action: 'number', value: '2' },
+        { text: '3', action: 'number', value: '3' },
+        { text: '+', class: 'operator', action: 'operation', value: '+' },
+        { text: '0', action: 'number', value: '0', span: 2 },
+        { text: '.', action: 'decimal' },
+        { text: '=', class: 'equals', action: 'calculate' }
+      ];
+
+      function buildCalculator() {
+        const container = document.getElementById('calcButtons');
+        container.innerHTML = '';
+        buttonsConfig.forEach(btn => {
+          const button = document.createElement('div');
+          button.className = 'calc-btn ' + (btn.class || '');
+          button.textContent = btn.text;
+          if (btn.span) button.style.gridColumn = 'span 2';
+          button.addEventListener('click', () => handleButton(btn));
+          container.appendChild(button);
+        });
+        updateDisplay();
+      }
+
+      function handleButton(btn) {
+        switch(btn.action) {
+          case 'number':
+            if (shouldResetDisplay) {
+              currentInput = btn.value;
+              shouldResetDisplay = false;
+            } else {
+              currentInput = currentInput === '0' ? btn.value : currentInput + btn.value;
+            }
+            break;
+          case 'decimal':
+            if (shouldResetDisplay) {
+              currentInput = '0.';
+              shouldResetDisplay = false;
+            } else if (!currentInput.includes('.')) {
+              currentInput += '.';
+            }
+            break;
+          case 'operation':
+            if (operation !== null && !shouldResetDisplay) {
+              calculate();
+            }
+            previousInput = currentInput;
+            operation = btn.value;
+            shouldResetDisplay = true;
+            break;
+          case 'calculate':
+            calculate();
+            operation = null;
+            break;
+          case 'clear':
+            currentInput = '0';
+            previousInput = '';
+            operation = null;
+            shouldResetDisplay = false;
+            break;
+          case 'percent':
+            currentInput = String(parseFloat(currentInput) / 100);
+            break;
+          case 'parentesis':
+            if (currentInput === '0' || shouldResetDisplay) {
+              currentInput = '(';
+              shouldResetDisplay = false;
+            } else {
+              currentInput += '(';
+            }
+            break;
+        }
+        updateDisplay();
+      }
+
+      function calculate() {
+        if (operation === null || shouldResetDisplay) return;
+        const prev = parseFloat(previousInput);
+        const curr = parseFloat(currentInput);
+        if (isNaN(prev) || isNaN(curr)) return;
+        
+        let result;
+        switch(operation) {
+          case '+': result = prev + curr; break;
+          case '-': result = prev - curr; break;
+          case '*': result = prev * curr; break;
+          case '/': result = curr !== 0 ? prev / curr : 'Error'; break;
+          default: return;
+        }
+        currentInput = typeof result === 'number' ? String(Math.round(result * 1e10) / 1e10) : result;
+        previousInput = '';
+        shouldResetDisplay = true;
+      }
+
+      function updateDisplay() {
+        if (operation && previousInput) {
+          calcDisplay.textContent = previousInput + ' ' + operation + ' ' + (shouldResetDisplay ? '' : currentInput);
+        } else {
+          calcDisplay.textContent = currentInput;
+        }
+      }
+
+      buildCalculator();
+
+      // ========== CONVERSOR DE DIVISAS ==========
+      const rates = {
+        USD: { EUR: 0.92, GBP: 0.79, JPY: 149.5, MXN: 17.1, USD: 1 },
+        EUR: { USD: 1.09, GBP: 0.86, JPY: 162.4, MXN: 18.6, EUR: 1 },
+        GBP: { USD: 1.26, EUR: 1.16, JPY: 188.2, MXN: 21.6, GBP: 1 },
+        JPY: { USD: 0.0067, EUR: 0.0062, GBP: 0.0053, MXN: 0.11, JPY: 1 },
+        MXN: { USD: 0.058, EUR: 0.054, GBP: 0.046, JPY: 8.7, MXN: 1 }
+      };
+
+      window.updateConverter = function() {
+        const amount = parseFloat(document.getElementById('amountInput').value) || 0;
+        const from = document.getElementById('fromCurrency').value;
+        const to = document.getElementById('toCurrency').value;
+        const result = amount * rates[from][to];
+        document.getElementById('converterResult').textContent = 
+          `${amount} ${from} = ${result.toFixed(4)} ${to}`;
+      };
+
+      // ========== VISUALIZADOR DE FUNCIONES ==========
+      window.drawFunction = function() {
+        const canvas = document.getElementById('functionCanvas');
+        const ctx2 = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx2.clearRect(0, 0, w, h);
+        
+        // Ejes
+        ctx2.strokeStyle = 'rgba(0, 255, 255, 0.5)';
+        ctx2.lineWidth = 1;
+        ctx2.beginPath();
+        ctx2.moveTo(0, h/2);
+        ctx2.lineTo(w, h/2);
+        ctx2.moveTo(w/2, 0);
+        ctx2.lineTo(w/2, h);
+        ctx2.stroke();
+        
+        const funcStr = document.getElementById('functionInput').value || 'sin(x)';
+        ctx2.strokeStyle = '#00f2ff';
+        ctx2.lineWidth = 2.5;
+        ctx2.shadowColor = '#00f2ff';
+        ctx2.shadowBlur = 10;
+        ctx2.beginPath();
+        
+        let firstPoint = true;
+        for (let px = 0; px < w; px++) {
+          const x = (px - w/2) / 30;
+          let y;
+          try {
+            y = eval(funcStr
+              .replace(/x/g, `(${x})`)
+              .replace(/sin/g, 'Math.sin')
+              .replace(/cos/g, 'Math.cos')
+              .replace(/tan/g, 'Math.tan')
+              .replace(/sqrt/g, 'Math.sqrt')
+              .replace(/abs/g, 'Math.abs')
+              .replace(/PI/g, 'Math.PI')
+              .replace(/E/g, 'Math.E')
+              .replace(/\^/g, '**')
+            );
+            if (typeof y !== 'number' || isNaN(y) || !isFinite(y)) continue;
+          } catch(e) {
+            continue;
+          }
+          const py = h/2 - y * 20;
+          if (firstPoint) {
+            ctx2.moveTo(px, py);
+            firstPoint = false;
+          } else {
+            ctx2.lineTo(px, py);
+          }
+        }
+        ctx2.stroke();
+        ctx2.shadowBlur = 0;
+      };
+
+      // ========== DETERMINANTE DE MATRIZ ==========
+      window.calcDeterminant = function() {
+        const a = parseFloat(document.getElementById('matrixA').value) || 0;
+        const b = parseFloat(document.getElementById('matrixB').value) || 0;
+        const c = parseFloat(document.getElementById('matrixC').value) || 0;
+        const d = parseFloat(document.getElementById('matrixD').value) || 0;
+        const det = a * d - b * c;
+        document.getElementById('matrixResult').textContent = `det = ${det}`;
+      };
+
+      // ========== SISTEMA DE DESCARGA ==========
+      function setupDownload(button, progressBar, progressFill, statusText) {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          progressBar.style.display = 'block';
+          progressFill.style.width = '0%';
+          statusText.textContent = '⏳ Preparando descarga cuántica...';
+          
+          let width = 0;
+          const interval = setInterval(() => {
+            if (width >= 100) {
+              clearInterval(interval);
+              statusText.textContent = '✅ Descarga completada. Abriendo VOLTRIX...';
+              
+              const element = document.createElement('a');
+              element.setAttribute('href', 'data:text/plain;charset=utf-8,VOLTRIX%20Installer%20v2.4%0A%0AHerramienta%20computacional%20definitiva%0APrecisión%20infinita%20·%20Diseño%20total%0A%0Awww.voltrix.app');
+              element.setAttribute('download', 'VOLTRIX_Installer_v2.4.exe');
+              element.style.display = 'none';
+              document.body.appendChild(element);
+              element.click();
+              document.body.removeChild(element);
+              
+              setTimeout(() => {
+                progressBar.style.display = 'none';
+                statusText.textContent = '';
+              }, 3500);
+            } else {
+              width += Math.floor(Math.random() * 7) + 4;
+              if (width > 100) width = 100;
+              progressFill.style.width = width + '%';
+              statusText.textContent = `⚡ Descargando VOLTRIX... ${width}%`;
+            }
+          }, 140);
+        });
+      }
+
+      setupDownload(
+        document.getElementById('mainDownloadBtn'),
+        document.getElementById('progressBar'),
+        document.getElementById('progressFill'),
+        document.getElementById('downloadStatus')
+      );
+      setupDownload(
+        document.getElementById('secondaryDownloadBtn'),
+        document.getElementById('progressBar2'),
+        document.getElementById('progressFill2'),
+        document.getElementById('downloadStatus2')
+      );
+
+      // ========== INICIALIZACIÓN ==========
+      updateConverter();
+      calcDeterminant();
+      drawFunction();
+    })();
+  </script>
+</body>
+</html>
