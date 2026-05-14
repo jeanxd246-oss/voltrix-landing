@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-  <title>VOLTRIX | Calculadora Avanzada · Descargar</title>
+  <title>VOLTRIX | Descargar Calculadora Avanzada</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +24,11 @@
       --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       background: var(--bg-deep);
@@ -34,6 +38,7 @@
       scroll-behavior: smooth;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       background-image: 
         radial-gradient(ellipse at 30% 20%, rgba(0, 242, 255, 0.08) 0%, transparent 55%),
         radial-gradient(ellipse at 70% 60%, rgba(123, 47, 247, 0.06) 0%, transparent 55%),
@@ -55,6 +60,7 @@
       z-index: 0;
       pointer-events: none;
       opacity: 0.7;
+      filter: blur(0.5px);
     }
 
     .main-container {
@@ -83,16 +89,70 @@
       margin: -1.5rem -2.5rem 0;
       padding: 1rem 2.5rem;
     }
-    .logo { display: flex; align-items: center; gap: 0.7rem; cursor: pointer; }
-    .logo-icon { font-size: 2.8rem; filter: drop-shadow(0 0 18px var(--cyan-neon)); color: var(--cyan-neon); animation: pulse-icon 2s ease-in-out infinite; }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .logo:hover {
+      filter: drop-shadow(0 0 20px var(--cyan-neon));
+    }
+    .logo-icon {
+      font-size: 2.8rem;
+      filter: drop-shadow(0 0 18px var(--cyan-neon));
+      color: var(--cyan-neon);
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
     @keyframes pulse-icon {
       0%, 100% { filter: drop-shadow(0 0 18px var(--cyan-neon)); }
       50% { filter: drop-shadow(0 0 28px var(--cyan-neon)) drop-shadow(0 0 40px var(--blue-electric)); }
     }
-    .logo-text { font-size: 2rem; font-weight: 700; letter-spacing: 0.3rem; background: linear-gradient(180deg, #ffffff 0%, #a0e9ff 85%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
-    .nav-link { font-size: 0.9rem; text-transform: uppercase; color: #b4c8e0; text-decoration: none; font-weight: 500; letter-spacing: 0.15em; cursor: pointer; transition: var(--transition-smooth); }
-    .nav-link:hover { color: white; text-shadow: 0 0 15px var(--cyan-neon); }
+    .logo-text {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.3rem;
+      background: linear-gradient(180deg, #ffffff 0%, #a0e9ff 85%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .nav-link {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #b4c8e0;
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+      position: relative;
+      padding: 0.3rem 0;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--cyan-neon);
+      box-shadow: var(--glow-cyan);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover {
+      color: var(--white-pure);
+      text-shadow: 0 0 15px var(--cyan-neon);
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
 
     .hero {
       display: flex;
@@ -103,7 +163,10 @@
       gap: 3rem;
       padding-top: 2rem;
     }
-    .hero-content { flex: 1 1 500px; animation: fadeInUp 1s ease-out; }
+    .hero-content {
+      flex: 1 1 500px;
+      animation: fadeInUp 1s ease-out;
+    }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -121,33 +184,47 @@
       margin-bottom: 1rem;
       text-transform: uppercase;
     }
-    .hero-sub { font-size: 1.5rem; font-weight: 500; color: #bce3ff; margin-bottom: 3rem; letter-spacing: 0.25rem; text-transform: uppercase; }
-    .button-group { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+    .hero-sub {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #bce3ff;
+      margin-bottom: 3rem;
+      letter-spacing: 0.25rem;
+      text-shadow: 0 0 25px rgba(0, 180, 255, 0.5);
+      text-transform: uppercase;
+    }
+    .button-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
     .btn-primary {
-      background: linear-gradient(145deg, rgba(0,30,50,0.9) 0%, rgba(0,80,120,0.6) 100%);
-      backdrop-filter: blur(16px);
-      border: 1.5px solid var(--cyan-neon);
-      padding: 1.2rem 3rem;
+      background: linear-gradient(145deg, #5865F2 0%, #4752c4 100%);
+      border: none;
+      padding: 1.5rem 3rem;
       border-radius: 5rem;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: white;
       cursor: pointer;
-      box-shadow: 0 0 35px rgba(0, 180, 255, 0.55);
-      letter-spacing: 0.15em;
+      box-shadow: 0 10px 40px rgba(88, 101, 242, 0.5);
+      letter-spacing: 0.1em;
       transition: var(--transition-smooth);
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
       font-family: var(--font-orbitron);
     }
     .btn-primary:hover {
-      box-shadow: 0 0 70px var(--cyan-neon);
-      border-color: white;
+      box-shadow: 0 20px 60px rgba(88, 101, 242, 0.8);
       transform: translateY(-5px);
+      background: #4752c4;
     }
     .btn-secondary {
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.5);
       padding: 1rem 2.5rem;
       border-radius: 5rem;
       font-size: 1rem;
@@ -155,11 +232,23 @@
       color: #d9f0ff;
       cursor: pointer;
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       transition: var(--transition-smooth);
+      letter-spacing: 0.08em;
     }
-    .btn-secondary:hover { border-color: var(--cyan-neon); box-shadow: 0 0 30px var(--cyan-neon); color: white; }
-
-    .hero-visual { flex: 1 1 500px; display: flex; justify-content: center; align-items: center; animation: float-visual 6s ease-in-out infinite; }
+    .btn-secondary:hover {
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 30px var(--cyan-neon);
+      color: white;
+      transform: translateY(-3px);
+    }
+    .hero-visual {
+      flex: 1 1 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: float-visual 6s ease-in-out infinite;
+    }
     @keyframes float-visual {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-20px); }
@@ -177,13 +266,17 @@
       display: flex;
       flex-direction: column;
       transform: rotateY(-3deg) rotateX(2deg);
-      background: linear-gradient(145deg, rgba(18,30,45,0.7) 0%, rgba(0,20,35,0.8) 100%);
+      background: linear-gradient(145deg, rgba(18, 30, 45, 0.7) 0%, rgba(0, 20, 35, 0.8) 100%);
+      transition: transform 0.5s ease;
       position: relative;
     }
     .mockup-calculator::after {
       content: '';
       position: absolute;
-      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
       background: linear-gradient(45deg, var(--cyan-neon), var(--purple-soft), var(--blue-electric), var(--cyan-neon));
       border-radius: 5rem;
       z-index: -1;
@@ -195,121 +288,394 @@
       0% { filter: blur(15px) hue-rotate(0deg); }
       100% { filter: blur(15px) hue-rotate(360deg); }
     }
-    .calc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
-    .calc-mode { color: var(--cyan-neon); font-family: var(--font-orbitron); font-size: 0.8rem; letter-spacing: 0.1em; }
-    .calc-indicator { width: 12px; height: 12px; background: #10b981; border-radius: 50%; box-shadow: 0 0 15px #10b981; }
+    .mockup-calculator:hover {
+      transform: rotateY(-1deg) rotateX(1deg) scale(1.02);
+    }
+
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0 0.5rem;
+    }
+    .calc-mode {
+      color: var(--cyan-neon);
+      font-family: var(--font-orbitron);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 10px var(--cyan-neon);
+    }
+    .calc-indicator {
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #10b981;
+    }
+
     .calc-display {
       background: #010a12;
       border-radius: 2.5rem;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
       border: 1px solid var(--cyan-neon);
-      box-shadow: inset 0 0 50px #001e3b;
+      box-shadow: inset 0 0 50px #001e3b, 0 0 20px rgba(0, 242, 255, 0.3);
       min-height: 130px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       align-items: flex-end;
     }
-    .calc-expression { color: #7a92b4; font-family: var(--font-orbitron); font-size: 1rem; min-height: 24px; word-wrap: break-word; text-align: right; width: 100%; margin-bottom: 0.5rem; }
-    .calc-result { font-size: 3rem; color: var(--cyan-neon); font-family: var(--font-orbitron); font-weight: 700; text-align: right; width: 100%; word-wrap: break-word; line-height: 1.1; text-shadow: 0 0 20px var(--cyan-neon); }
-    .calc-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-    .calc-tab {
-      flex: 1; padding: 0.6rem; text-align: center; font-family: var(--font-orbitron); font-size: 0.7rem; color: #7a92b4;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(0, 255, 200, 0.2); border-radius: 1rem; cursor: pointer; transition: var(--transition-smooth);
-    }
-    .calc-tab.active { color: var(--cyan-neon); border-color: var(--cyan-neon); box-shadow: 0 0 15px rgba(0,242,255,0.3); background: rgba(0,242,255,0.1); }
-    .calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; }
-    .calc-btn {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(0, 255, 200, 0.4); border-radius: 1.2rem; padding: 0.9rem 0.5rem;
-      color: white; font-weight: 600; font-size: 1rem; backdrop-filter: blur(8px); transition: var(--transition-smooth);
-      text-align: center; cursor: pointer; font-family: var(--font-orbitron); user-select: none;
-    }
-    .calc-btn:hover { background: var(--cyan-neon); color: black; box-shadow: 0 0 35px var(--cyan-neon); border-color: white; transform: translateY(-2px); }
-    .calc-btn:active { transform: scale(0.9); }
-    .calc-btn.operator { border-color: rgba(0,180,255,0.8); color: #00e0ff; font-size: 1.3rem; }
-    .calc-btn.equals { background: rgba(0,100,200,0.5); border-color: var(--cyan-neon); color: white; font-weight: 800; font-size: 1.5rem; }
-    .calc-btn.clear { border-color: rgba(255,100,100,0.6); color: #ff6b6b; }
-    .calc-btn.func { border-color: rgba(160,120,255,0.6); color: #a78bfa; font-size: 0.8rem; }
-
-    .section-title { font-size: 2.8rem; margin-bottom: 3rem; text-transform: uppercase; letter-spacing: 0.2em; color: #e0f0ff; border-left: 6px solid var(--cyan-neon); padding-left: 2rem; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2.5rem; }
-    .feature-card {
-      background: rgba(10,20,30,0.4); backdrop-filter: blur(20px); border: 1px solid rgba(0,255,255,0.25);
-      border-radius: 3rem; padding: 2.8rem 2.2rem; transition: var(--transition-smooth);
-    }
-    .feature-card:hover { border-color: var(--cyan-neon); box-shadow: 0 0 60px rgba(0,180,255,0.7); transform: translateY(-12px); }
-    .feature-icon { font-size: 3rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 18px var(--cyan-neon)); }
-
-    .download-section { display: flex; justify-content: center; margin: 5rem 0; flex-direction: column; align-items: center; gap: 2rem; }
-    .download-btn {
-      background: radial-gradient(circle at 30% 30%, #003954, #000c14);
-      border: 2px solid var(--cyan-neon);
-      padding: 2.4rem 5.5rem;
-      border-radius: 7rem;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: white;
-      box-shadow: 0 0 70px #0066cc;
-      letter-spacing: 0.25em;
-      cursor: pointer;
+    .calc-expression {
+      color: #7a92b4;
       font-family: var(--font-orbitron);
-      text-decoration: none;
-      transition: var(--transition-smooth);
-      display: inline-block;
+      font-size: 1rem;
+      min-height: 24px;
+      word-wrap: break-word;
+      text-align: right;
+      width: 100%;
+      margin-bottom: 0.5rem;
     }
-    .download-btn:hover { box-shadow: 0 0 110px var(--cyan-neon); transform: scale(1.05); background: #002b44; border-color: white; }
-    .platform-badges { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-    .platform-badge { background: rgba(0,242,255,0.1); border: 1px solid rgba(0,242,255,0.3); border-radius: 2rem; padding: 0.5rem 1.2rem; font-size: 0.8rem; color: var(--cyan-neon); font-family: var(--font-orbitron); }
-
-    .footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,255,255,0.4); padding-top: 2.5rem; color: #9bb8da; flex-wrap: wrap; gap: 1rem; }
-
-    .success-message {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #0a1620;
-      border: 2px solid #10b981;
-      border-radius: 2rem;
-      padding: 3rem;
-      z-index: 1000;
-      text-align: center;
-      box-shadow: 0 0 80px rgba(16, 185, 129, 0.5);
-    }
-    .success-message h2 { color: #10b981; font-family: var(--font-orbitron); margin-bottom: 1rem; }
-    .success-message button {
-      background: #10b981;
-      color: black;
-      border: none;
-      padding: 1rem 2rem;
-      border-radius: 3rem;
+    .calc-result {
+      font-size: 3rem;
+      color: var(--cyan-neon);
+      font-family: var(--font-orbitron);
       font-weight: 700;
+      text-align: right;
+      width: 100%;
+      word-wrap: break-word;
+      line-height: 1.1;
+      text-shadow: 0 0 20px var(--cyan-neon);
+    }
+
+    .calc-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .calc-tab {
+      flex: 1;
+      padding: 0.6rem;
+      text-align: center;
       font-family: var(--font-orbitron);
+      font-size: 0.7rem;
+      color: #7a92b4;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 255, 200, 0.2);
+      border-radius: 1rem;
       cursor: pointer;
-      margin-top: 1rem;
+      transition: var(--transition-smooth);
+      letter-spacing: 0.05em;
+    }
+    .calc-tab.active {
+      color: var(--cyan-neon);
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+      background: rgba(0, 242, 255, 0.1);
+    }
+
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.7rem;
+    }
+    .calc-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 255, 200, 0.4);
+      border-radius: 1.2rem;
+      padding: 0.9rem 0.5rem;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: var(--transition-smooth);
+      text-align: center;
+      cursor: pointer;
+      font-family: var(--font-orbitron);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .calc-btn:hover {
+      background: var(--cyan-neon);
+      color: black;
+      box-shadow: 0 0 35px var(--cyan-neon);
+      border-color: white;
+      transform: translateY(-2px);
+    }
+    .calc-btn:active {
+      transform: scale(0.9);
+      transition: transform 0.1s;
+    }
+    .calc-btn.operator {
+      border-color: rgba(0, 180, 255, 0.8);
+      color: #00e0ff;
+      font-size: 1.3rem;
+    }
+    .calc-btn.equals {
+      background: rgba(0, 100, 200, 0.5);
+      border-color: var(--cyan-neon);
+      color: white;
+      font-weight: 800;
+      font-size: 1.5rem;
+    }
+    .calc-btn.clear {
+      border-color: rgba(255, 100, 100, 0.6);
+      color: #ff6b6b;
+    }
+    .calc-btn.func {
+      border-color: rgba(160, 120, 255, 0.6);
+      color: #a78bfa;
+      font-size: 0.8rem;
+    }
+    .calc-btn.mem {
+      border-color: rgba(245, 158, 11, 0.6);
+      color: #f59e0b;
+      font-size: 0.7rem;
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #e0f0ff;
+      border-left: 6px solid var(--cyan-neon);
+      padding-left: 2rem;
+      text-shadow: 0 0 25px #003756;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 2rem;
+      width: 60px;
+      height: 3px;
+      background: var(--cyan-neon);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2.5rem;
+    }
+    .feature-card {
+      background: rgba(10, 20, 30, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      border-radius: 3rem;
+      padding: 2.8rem 2.2rem;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 242, 255, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    .feature-card:hover {
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 60px rgba(0, 180, 255, 0.7), 0 20px 40px rgba(0, 0, 0, 0.6);
+      transform: translateY(-12px);
+    }
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 0 18px var(--cyan-neon));
+    }
+    .feature-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      color: white;
+      letter-spacing: 0.05em;
+    }
+    .feature-card p {
+      color: #b0c8e0;
+      font-size: 0.95rem;
+    }
+
+    .download-section {
+      display: flex;
+      justify-content: center;
+      margin: 5rem 0;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+    .download-card {
+      background: rgba(10, 20, 30, 0.6);
+      backdrop-filter: blur(30px);
+      border: 2px solid var(--cyan-neon);
+      border-radius: 3rem;
+      padding: 3rem;
+      max-width: 650px;
+      width: 90%;
+      box-shadow: 0 0 60px rgba(0, 242, 255, 0.3);
+      text-align: center;
+    }
+    .download-card h2 {
+      font-family: var(--font-orbitron);
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+    .download-card p {
+      color: #b0c8e0;
+      margin-bottom: 2rem;
+    }
+    .btn-download {
+      background: #5865F2;
+      border: none;
+      padding: 1.5rem 4rem;
+      border-radius: 5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      font-family: var(--font-orbitron);
+      letter-spacing: 0.1em;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 10px 30px rgba(88, 101, 242, 0.5);
+    }
+    .btn-download:hover {
+      background: #4752c4;
+      transform: translateY(-3px);
+      box-shadow: 0 20px 50px rgba(88, 101, 242, 0.7);
+    }
+    .platform-badges {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .platform-badge {
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      border-radius: 2rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
+      color: var(--cyan-neon);
+      font-family: var(--font-orbitron);
+      letter-spacing: 0.05em;
+    }
+
+    .progress-container {
+      display: none;
+      margin-top: 2rem;
+      background: #00161f;
+      border-radius: 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--cyan-neon);
+    }
+    .progress-bar {
+      height: 8px;
+      background: #00161f;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan-neon), var(--blue-electric));
+      box-shadow: 0 0 20px var(--cyan-neon);
+      transition: width 0.3s;
+      border-radius: 10px;
+    }
+    .progress-text {
+      color: var(--cyan-neon);
+      margin-top: 0.8rem;
+      font-family: var(--font-orbitron);
+      font-size: 0.9rem;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(0, 255, 255, 0.4);
+      padding-top: 2.5rem;
+      color: #9bb8da;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer .logo-text {
+      font-size: 1.4rem;
+    }
+    .social-icons span {
+      font-size: 1.5rem;
+      margin-left: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .social-icons span:hover {
+      color: var(--cyan-neon);
+      text-shadow: 0 0 20px var(--cyan-neon);
+      transform: translateY(-3px);
     }
 
     @media (max-width: 768px) {
-      .hero { flex-direction: column; text-align: center; }
-      .hero-visual { margin-top: 2rem; width: 100%; }
-      .mockup-calculator { width: 100%; max-width: 380px; transform: none; border-radius: 3rem; }
-      .navbar { flex-direction: column; gap: 1rem; }
-      .nav-links { gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
-      .download-btn { padding: 1.8rem 2rem; font-size: 1.3rem; width: 90%; text-align: center; }
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+      .hero-visual {
+        margin-top: 2rem;
+        width: 100%;
+      }
+      .mockup-calculator {
+        width: 100%;
+        max-width: 380px;
+        transform: none;
+        border-radius: 3rem;
+      }
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .nav-links {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .btn-primary {
+        padding: 1.2rem 2rem;
+        font-size: 1.1rem;
+        width: 100%;
+        justify-content: center;
+      }
+      .download-card {
+        padding: 2rem;
+      }
+      .btn-download {
+        padding: 1.2rem 2rem;
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="particles-canvas"></canvas>
-
-  <div id="successMsg" class="success-message">
-    <h2>✅ ¡DESCARGA EXITOSA!</h2>
-    <p style="color:#b0c8e0;">Archivo: INSTALAR_VOLTRIX.txt</p>
-    <p style="color:#7b9bc0; margin-top:0.5rem;">Ábrelo con Bloc de Notas y sigue las instrucciones</p>
-    <button onclick="document.getElementById('successMsg').style.display='none'">CERRAR</button>
-  </div>
 
   <div class="main-container">
     <nav class="navbar">
@@ -320,7 +686,7 @@
       <div class="nav-links">
         <span class="nav-link" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">Inicio</span>
         <span class="nav-link" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Funciones</span>
-        <span class="nav-link" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">Descargar</span>
+        <span class="nav-link" onclick="document.getElementById('download-section').scrollIntoView({behavior:'smooth'})">Descargar</span>
       </div>
     </nav>
 
@@ -329,16 +695,22 @@
         <h1 class="hero-title">VOLTRIX</h1>
         <p class="hero-sub rajdhani">POTENCIA INFINITA · DISEÑO TOTAL</p>
         <div class="button-group">
-          <button class="btn-primary" id="mainDownloadBtn">
-            ⬇️ DESCARGAR VOLTRIX
+          <button class="btn-primary" id="heroDownloadBtn">
+            <span>⬇️</span> DESCARGAR VOLTRIX
           </button>
-          <button class="btn-secondary" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">
-            ⚡ VER PLATAFORMAS
+          <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+            ⚡ VER FUNCIONES
           </button>
         </div>
-        <p style="margin-top:2rem; color:#7b9bc0; font-size:0.95rem;">
+        <p style="margin-top:2rem; color:#7b9bc0; font-size:0.95rem; letter-spacing:0.05em;">
           📱 Android · iOS · 🖥️ Windows · macOS · Linux
         </p>
+        <div class="progress-container" id="heroProgress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="heroProgressFill"></div>
+          </div>
+          <p class="progress-text" id="heroProgressText"></p>
+        </div>
       </div>
       <div class="hero-visual">
         <div class="mockup-calculator" id="functionalCalc">
@@ -396,241 +768,474 @@
       </div>
     </section>
 
-    <div class="download-section" id="download">
-      <button class="download-btn" id="secondaryDownloadBtn">
-        📦 DESCARGAR VOLTRIX v2.4
-      </button>
-      <div class="platform-badges">
-        <span class="platform-badge">📱 Android</span>
-        <span class="platform-badge">🍎 iOS</span>
-        <span class="platform-badge">🖥️ Windows</span>
-        <span class="platform-badge">💻 macOS</span>
-        <span class="platform-badge">🐧 Linux</span>
+    <div class="download-section" id="download-section">
+      <div class="download-card">
+        <h2>⬇️ DESCARGAR VOLTRIX</h2>
+        <p>Como Discord o Spotify. Instalación automática en 1 clic.</p>
+        
+        <button class="btn-download" id="mainDownloadBtn">
+          <span>💾</span> Descargar para Windows
+        </button>
+        
+        <p style="margin-top:1rem; font-size:0.8rem; color:#7b9bc0;">
+          También disponible para macOS y Linux
+        </p>
+
+        <div class="platform-badges">
+          <span class="platform-badge">📱 Android</span>
+          <span class="platform-badge">🍎 iOS</span>
+          <span class="platform-badge">🖥️ Windows</span>
+          <span class="platform-badge">💻 macOS</span>
+          <span class="platform-badge">🐧 Linux</span>
+        </div>
+
+        <div class="progress-container" id="mainProgress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="mainProgressFill"></div>
+          </div>
+          <p class="progress-text" id="mainProgressText"></p>
+        </div>
       </div>
     </div>
 
     <footer class="footer">
       <span class="logo-text">VOLTRIX</span>
-      <span>herramienta computacional del mañana</span>
-      <div>🔵 ⚪ 🔷</div>
+      <span style="font-size:0.95rem; letter-spacing:0.05em;">herramienta computacional del mañana</span>
+      <div class="social-icons">
+        <span>🔵</span>
+        <span>⚪</span>
+        <span>🔷</span>
+      </div>
     </footer>
   </div>
 
   <script>
-    // Partículas
-    const canvas = document.getElementById('particles-canvas');
-    const ctx = canvas.getContext('2d');
-    let w, h, particles = [];
-    let mx = 0, my = 0;
+    (function() {
+      // ========== PARTÍCULAS ==========
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [];
+      let mouseX = 0, mouseY = 0;
 
-    function rs() { w = window.innerWidth; h = window.innerHeight; canvas.width = w; canvas.height = h; }
-    window.addEventListener('resize', rs);
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    rs();
-    mx = w/2; my = h/2;
-
-    class P {
-      constructor() { this.rst(); }
-      rst() {
-        this.x = Math.random()*w; this.y = Math.random()*h;
-        this.s = Math.random()*2+0.5; this.sx = (Math.random()-0.5)*0.3;
-        this.sy = (Math.random()-0.5)*0.3; this.l = 0.7;
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
       }
-      upd() {
-        this.x+=this.sx; this.y+=this.sy; this.l-=0.001;
-        const dx=this.x-mx, dy=this.y-my, d=Math.sqrt(dx*dx+dy*dy);
-        if(d<150){const f=(150-d)/150; this.x+=dx*f*0.02; this.y+=dy*f*0.02;}
-        if(this.x<0||this.x>w||this.y<0||this.y>h||this.l<0.01)this.rst();
-      }
-      drw(ctx) {
-        ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2);
-        ctx.fillStyle=`hsla(190,100%,70%,${Math.min(this.l,0.7)})`;
-        ctx.shadowColor='#0ff';ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;
-      }
-    }
-    for(let i=0;i<100;i++)particles.push(new P());
-    function anim(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{p.upd();p.drw(ctx);});requestAnimationFrame(anim);}
-    anim();
-
-    // Calculadora
-    const calcExpression=document.getElementById('calcExpression');
-    const calcResult=document.getElementById('calcResult');
-    let cur='0', prev='', op=null, rst=false, mode='basic', mem=0;
-
-    document.querySelectorAll('.calc-tab').forEach(t=>{
-      t.addEventListener('click',()=>{
-        document.querySelectorAll('.calc-tab').forEach(x=>x.classList.remove('active'));
-        t.classList.add('active');
-        mode=t.dataset.mode;
-        render();
+      window.addEventListener('resize', resize);
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
       });
-    });
+      resize();
+      mouseX = width / 2;
+      mouseY = height / 2;
 
-    function render(){
-      const c=document.getElementById('calcButtons');
-      let b;
-      if(mode==='basic'){
-        b=[
-          {t:'C',cl:'clear',a:'clear'},{t:'±',cl:'func',a:'sign'},{t:'%',cl:'func',a:'percent'},{t:'÷',cl:'operator',a:'op',v:'/'},
-          {t:'7',a:'num',v:'7'},{t:'8',a:'num',v:'8'},{t:'9',a:'num',v:'9'},{t:'×',cl:'operator',a:'op',v:'*'},
-          {t:'4',a:'num',v:'4'},{t:'5',a:'num',v:'5'},{t:'6',a:'num',v:'6'},{t:'−',cl:'operator',a:'op',v:'-'},
-          {t:'1',a:'num',v:'1'},{t:'2',a:'num',v:'2'},{t:'3',a:'num',v:'3'},{t:'+',cl:'operator',a:'op',v:'+'},
-          {t:'M+',cl:'func',a:'mem'},{t:'0',a:'num',v:'0'},{t:'.',a:'dec'},{t:'=',cl:'equals',a:'calc'},
-        ];
-      }else if(mode==='sci'){
-        b=[
-          {t:'sin',cl:'func',a:'sci',v:'sin'},{t:'cos',cl:'func',a:'sci',v:'cos'},{t:'tan',cl:'func',a:'sci',v:'tan'},{t:'C',cl:'clear',a:'clear'},
-          {t:'√',cl:'func',a:'sci',v:'sqrt'},{t:'x²',cl:'func',a:'sci',v:'sq'},{t:'xʸ',cl:'operator',a:'op',v:'^'},{t:'÷',cl:'operator',a:'op',v:'/'},
-          {t:'7',a:'num',v:'7'},{t:'8',a:'num',v:'8'},{t:'9',a:'num',v:'9'},{t:'×',cl:'operator',a:'op',v:'*'},
-          {t:'4',a:'num',v:'4'},{t:'5',a:'num',v:'5'},{t:'6',a:'num',v:'6'},{t:'−',cl:'operator',a:'op',v:'-'},
-          {t:'1',a:'num',v:'1'},{t:'2',a:'num',v:'2'},{t:'3',a:'num',v:'3'},{t:'+',cl:'operator',a:'op',v:'+'},
-          {t:'π',cl:'func',a:'const',v:Math.PI},{t:'0',a:'num',v:'0'},{t:'.',a:'dec'},{t:'=',cl:'equals',a:'calc'},
-        ];
-      }else{
-        b=[
-          {t:'USD→EUR',cl:'func',a:'conv',v:'usd_eur'},{t:'EUR→USD',cl:'func',a:'conv',v:'eur_usd'},{t:'km→mi',cl:'func',a:'conv',v:'km_mi'},{t:'°C→°F',cl:'func',a:'conv',v:'c_f'},
-          {t:'kg→lb',cl:'func',a:'conv',v:'kg_lb'},{t:'C',cl:'clear',a:'clear'},{t:'7',a:'num',v:'7'},{t:'8',a:'num',v:'8'},
-          {t:'9',a:'num',v:'9'},{t:'÷',cl:'operator',a:'op',v:'/'},{t:'4',a:'num',v:'4'},{t:'5',a:'num',v:'5'},
-          {t:'6',a:'num',v:'6'},{t:'×',cl:'operator',a:'op',v:'*'},{t:'1',a:'num',v:'1'},{t:'2',a:'num',v:'2'},
-          {t:'3',a:'num',v:'3'},{t:'−',cl:'operator',a:'op',v:'-'},{t:'0',a:'num',v:'0'},{t:'.',a:'dec'},
-          {t:'=',cl:'equals',a:'calc'},{t:'+',cl:'operator',a:'op',v:'+'},
-        ];
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.baseSize = Math.random() * 2.2 + 0.6;
+          this.size = this.baseSize;
+          this.speedX = (Math.random() - 0.5) * 0.4;
+          this.speedY = (Math.random() - 0.5) * 0.4;
+          this.life = 0.6 + Math.random() * 0.9;
+          this.maxLife = this.life;
+          this.colorHue = 180 + Math.floor(Math.random() * 40);
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          this.life -= 0.001;
+          const dx = this.x - mouseX;
+          const dy = this.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            const force = (150 - dist) / 150;
+            this.x += dx * force * 0.02;
+            this.y += dy * force * 0.02;
+            this.size = this.baseSize + force * 2;
+          } else {
+            this.size = this.baseSize;
+          }
+          if (this.x < 0 || this.x > width || this.y < 0 || this.y > height || this.life <= 0.01) {
+            this.reset();
+            this.life = this.maxLife;
+          }
+        }
+        draw(ctx) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          const alpha = Math.min(this.life, 0.8);
+          ctx.fillStyle = `hsla(${this.colorHue}, 100%, 70%, ${alpha})`;
+          ctx.shadowColor = `hsla(${this.colorHue}, 100%, 70%, 0.8)`;
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
       }
-      c.innerHTML='';
-      b.forEach(btn=>{
-        const d=document.createElement('div');
-        d.className='calc-btn '+(btn.cl||'');
-        d.textContent=btn.t;
-        d.addEventListener('click',()=>act(btn));
-        c.appendChild(d);
+
+      for (let i = 0; i < 130; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.update();
+          p.draw(ctx);
+        });
+        for (let i = 0; i < particles.length; i += 2) {
+          const p1 = particles[i];
+          const p2 = particles[i + 1];
+          if (!p1 || !p2) continue;
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(0, 210, 255, ${0.1 * (1 - dist / 130)})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      // ========== CALCULADORA FUNCIONAL ==========
+      const calcExpression = document.getElementById('calcExpression');
+      const calcResult = document.getElementById('calcResult');
+      let currentInput = '0';
+      let previousInput = '';
+      let operation = null;
+      let shouldResetDisplay = false;
+      let currentMode = 'basic';
+      let memory = 0;
+
+      const tabs = document.querySelectorAll('.calc-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentMode = tab.dataset.mode;
+          renderButtons();
+        });
       });
-    }
 
-    function act(btn){
-      switch(btn.a){
-        case'num':
-          if(rst||cur==='Error'){cur=btn.v;rst=false;}
-          else cur=cur==='0'?btn.v:cur+btn.v;
-          updExpr();break;
-        case'dec':
-          if(rst){cur='0.';rst=false;}
-          else if(!cur.includes('.'))cur+='.';
-          updExpr();break;
-        case'op':
-          if(op&&!rst)calc();
-          prev=cur;op=btn.v;rst=true;updExpr();break;
-        case'calc':calc();op=null;break;
-        case'clear':cur='0';prev='';op=null;rst=false;calcExpression.textContent='';break;
-        case'percent':cur=String(parseFloat(cur)/100);break;
-        case'sign':
-          if(cur!=='0'&&cur!=='Error')cur=cur.startsWith('-')?cur.slice(1):'-'+cur;
-          break;
-        case'sci':sci(btn.v);break;
-        case'const':cur=String(btn.v);rst=true;break;
-        case'conv':conv(btn.v);break;
-        case'mem':mem+=parseFloat(cur)||0;break;
+      function renderButtons() {
+        const container = document.getElementById('calcButtons');
+        let buttons;
+        if (currentMode === 'basic') {
+          buttons = [
+            { text: 'C', class: 'clear', action: 'clear' },
+            { text: '±', class: 'func', action: 'sign' },
+            { text: '%', class: 'func', action: 'percent' },
+            { text: '÷', class: 'operator', action: 'operation', value: '/' },
+            { text: '7', action: 'number', value: '7' },
+            { text: '8', action: 'number', value: '8' },
+            { text: '9', action: 'number', value: '9' },
+            { text: '×', class: 'operator', action: 'operation', value: '*' },
+            { text: '4', action: 'number', value: '4' },
+            { text: '5', action: 'number', value: '5' },
+            { text: '6', action: 'number', value: '6' },
+            { text: '−', class: 'operator', action: 'operation', value: '-' },
+            { text: '1', action: 'number', value: '1' },
+            { text: '2', action: 'number', value: '2' },
+            { text: '3', action: 'number', value: '3' },
+            { text: '+', class: 'operator', action: 'operation', value: '+' },
+            { text: 'M+', class: 'mem', action: 'memAdd' },
+            { text: '0', action: 'number', value: '0' },
+            { text: '.', action: 'decimal' },
+            { text: '=', class: 'equals', action: 'calculate' },
+          ];
+        } else if (currentMode === 'sci') {
+          buttons = [
+            { text: 'sin', class: 'func', action: 'sciFn', value: 'sin' },
+            { text: 'cos', class: 'func', action: 'sciFn', value: 'cos' },
+            { text: 'tan', class: 'func', action: 'sciFn', value: 'tan' },
+            { text: 'C', class: 'clear', action: 'clear' },
+            { text: '√', class: 'func', action: 'sciFn', value: 'sqrt' },
+            { text: 'x²', class: 'func', action: 'sciFn', value: 'sq' },
+            { text: 'xʸ', class: 'operator', action: 'operation', value: '^' },
+            { text: '÷', class: 'operator', action: 'operation', value: '/' },
+            { text: '7', action: 'number', value: '7' },
+            { text: '8', action: 'number', value: '8' },
+            { text: '9', action: 'number', value: '9' },
+            { text: '×', class: 'operator', action: 'operation', value: '*' },
+            { text: '4', action: 'number', value: '4' },
+            { text: '5', action: 'number', value: '5' },
+            { text: '6', action: 'number', value: '6' },
+            { text: '−', class: 'operator', action: 'operation', value: '-' },
+            { text: '1', action: 'number', value: '1' },
+            { text: '2', action: 'number', value: '2' },
+            { text: '3', action: 'number', value: '3' },
+            { text: '+', class: 'operator', action: 'operation', value: '+' },
+            { text: 'π', class: 'func', action: 'constant', value: Math.PI },
+            { text: '0', action: 'number', value: '0' },
+            { text: '.', action: 'decimal' },
+            { text: '=', class: 'equals', action: 'calculate' },
+          ];
+        } else {
+          buttons = [
+            { text: 'USD→EUR', class: 'func', action: 'convert', value: 'usd_eur' },
+            { text: 'EUR→USD', class: 'func', action: 'convert', value: 'eur_usd' },
+            { text: 'km→mi', class: 'func', action: 'convert', value: 'km_mi' },
+            { text: '°C→°F', class: 'func', action: 'convert', value: 'c_f' },
+            { text: 'kg→lb', class: 'func', action: 'convert', value: 'kg_lb' },
+            { text: 'C', class: 'clear', action: 'clear' },
+            { text: '7', action: 'number', value: '7' },
+            { text: '8', action: 'number', value: '8' },
+            { text: '9', action: 'number', value: '9' },
+            { text: '÷', class: 'operator', action: 'operation', value: '/' },
+            { text: '4', action: 'number', value: '4' },
+            { text: '5', action: 'number', value: '5' },
+            { text: '6', action: 'number', value: '6' },
+            { text: '×', class: 'operator', action: 'operation', value: '*' },
+            { text: '1', action: 'number', value: '1' },
+            { text: '2', action: 'number', value: '2' },
+            { text: '3', action: 'number', value: '3' },
+            { text: '−', class: 'operator', action: 'operation', value: '-' },
+            { text: '0', action: 'number', value: '0' },
+            { text: '.', action: 'decimal' },
+            { text: '=', class: 'equals', action: 'calculate' },
+            { text: '+', class: 'operator', action: 'operation', value: '+' },
+          ];
+        }
+
+        container.innerHTML = '';
+        buttons.forEach(btn => {
+          const button = document.createElement('div');
+          button.className = 'calc-btn ' + (btn.class || '');
+          button.textContent = btn.text;
+          button.addEventListener('click', () => handleButton(btn));
+          container.appendChild(button);
+        });
       }
-      updDisp();
-    }
 
-    function calc(){
-      if(op===null||rst)return;
-      const a=parseFloat(prev),b=parseFloat(cur);
-      if(isNaN(a)||isNaN(b))return;
-      let r;
-      switch(op){case'+':r=a+b;break;case'-':r=a-b;break;case'*':r=a*b;break;case'/':r=b!==0?a/b:NaN;break;case'^':r=Math.pow(a,b);break;}
-      calcExpression.textContent=`${prev} ${op} ${cur} =`;
-      cur=isNaN(r)||!isFinite(r)?'Error':String(Math.round(r*1e12)/1e12);
-      prev='';rst=true;
-    }
+      function handleButton(btn) {
+        switch(btn.action) {
+          case 'number':
+            if (shouldResetDisplay || currentInput === 'Error') {
+              currentInput = btn.value;
+              shouldResetDisplay = false;
+            } else {
+              currentInput = currentInput === '0' ? btn.value : currentInput + btn.value;
+            }
+            updateExpression();
+            break;
+          case 'decimal':
+            if (shouldResetDisplay) {
+              currentInput = '0.';
+              shouldResetDisplay = false;
+            } else if (!currentInput.includes('.')) {
+              currentInput += '.';
+            }
+            updateExpression();
+            break;
+          case 'operation':
+            if (operation && !shouldResetDisplay) calculate();
+            previousInput = currentInput;
+            operation = btn.value;
+            shouldResetDisplay = true;
+            updateExpression();
+            break;
+          case 'calculate':
+            calculate();
+            operation = null;
+            break;
+          case 'clear':
+            currentInput = '0';
+            previousInput = '';
+            operation = null;
+            shouldResetDisplay = false;
+            calcExpression.textContent = '';
+            break;
+          case 'percent':
+            currentInput = String(parseFloat(currentInput) / 100);
+            break;
+          case 'sign':
+            if (currentInput !== '0' && currentInput !== 'Error') {
+              currentInput = currentInput.startsWith('-') ? currentInput.slice(1) : '-' + currentInput;
+            }
+            break;
+          case 'sciFn':
+            sciFunction(btn.value);
+            break;
+          case 'constant':
+            currentInput = String(btn.value);
+            shouldResetDisplay = true;
+            break;
+          case 'convert':
+            convert(btn.value);
+            break;
+          case 'memAdd':
+            memory += parseFloat(currentInput) || 0;
+            break;
+        }
+        updateDisplay();
+      }
 
-    function sci(fn){
-      const v=parseFloat(cur);
-      if(isNaN(v)){cur='Error';return;}
-      let r;const D=Math.PI/180;
-      switch(fn){case'sin':r=Math.sin(v*D);break;case'cos':r=Math.cos(v*D);break;case'tan':r=Math.tan(v*D);break;case'sqrt':r=v>=0?Math.sqrt(v):NaN;break;case'sq':r=v*v;break;}
-      calcExpression.textContent=`${fn}(${v}) =`;
-      cur=isNaN(r)||!isFinite(r)?'Error':String(Math.round(r*1e12)/1e12);
-      rst=true;
-    }
+      function calculate() {
+        if (operation === null || shouldResetDisplay) return;
+        const prev = parseFloat(previousInput);
+        const curr = parseFloat(currentInput);
+        if (isNaN(prev) || isNaN(curr)) return;
+        
+        let result;
+        switch(operation) {
+          case '+': result = prev + curr; break;
+          case '-': result = prev - curr; break;
+          case '*': result = prev * curr; break;
+          case '/': result = curr !== 0 ? prev / curr : NaN; break;
+          case '^': result = Math.pow(prev, curr); break;
+          default: return;
+        }
+        calcExpression.textContent = `${previousInput} ${operation} ${currentInput} =`;
+        currentInput = isNaN(result) || !isFinite(result) ? 'Error' : String(Math.round(result * 1e12) / 1e12);
+        previousInput = '';
+        shouldResetDisplay = true;
+      }
 
-    function conv(type){
-      const v=parseFloat(cur);
-      if(isNaN(v)){cur='Error';return;}
-      let r,ex;
-      switch(type){case'usd_eur':r=v*0.92;ex=`${v} USD = ${r.toFixed(2)} EUR`;break;case'eur_usd':r=v*1.09;ex=`${v} EUR = ${r.toFixed(2)} USD`;break;case'km_mi':r=v*0.621371;ex=`${v} km = ${r.toFixed(2)} mi`;break;case'c_f':r=v*9/5+32;ex=`${v}°C = ${r.toFixed(1)}°F`;break;case'kg_lb':r=v*2.20462;ex=`${v} kg = ${r.toFixed(2)} lb`;break;}
-      calcExpression.textContent=ex;
-      cur=String(Math.round(r*1e6)/1e6);rst=true;
-    }
+      function sciFunction(fn) {
+        const v = parseFloat(currentInput);
+        if (isNaN(v)) { currentInput = 'Error'; return; }
+        let result;
+        const D = Math.PI / 180;
+        switch(fn) {
+          case 'sin': result = Math.sin(v * D); break;
+          case 'cos': result = Math.cos(v * D); break;
+          case 'tan': result = Math.tan(v * D); break;
+          case 'sqrt': result = v >= 0 ? Math.sqrt(v) : NaN; break;
+          case 'sq': result = v * v; break;
+          default: return;
+        }
+        calcExpression.textContent = `${fn}(${v}) =`;
+        currentInput = isNaN(result) || !isFinite(result) ? 'Error' : String(Math.round(result * 1e12) / 1e12);
+        shouldResetDisplay = true;
+      }
 
-    function updExpr(){calcExpression.textContent=op&&prev?`${prev} ${op}`:'';}
-    function updDisp(){calcResult.textContent=cur;calcResult.style.color=cur==='Error'?'#f43f5e':'#00f2ff';}
+      function convert(type) {
+        const v = parseFloat(currentInput);
+        if (isNaN(v)) { currentInput = 'Error'; return; }
+        let result, expr;
+        switch(type) {
+          case 'usd_eur': result = v * 0.92; expr = `${v} USD = ${result.toFixed(2)} EUR`; break;
+          case 'eur_usd': result = v * 1.09; expr = `${v} EUR = ${result.toFixed(2)} USD`; break;
+          case 'km_mi': result = v * 0.621371; expr = `${v} km = ${result.toFixed(2)} mi`; break;
+          case 'c_f': result = v * 9/5 + 32; expr = `${v}°C = ${result.toFixed(1)}°F`; break;
+          case 'kg_lb': result = v * 2.20462; expr = `${v} kg = ${result.toFixed(2)} lb`; break;
+          default: return;
+        }
+        calcExpression.textContent = expr;
+        currentInput = String(Math.round(result * 1e6) / 1e6);
+        shouldResetDisplay = true;
+      }
 
-    render();updDisp();
+      function updateExpression() {
+        if (operation && previousInput) {
+          calcExpression.textContent = `${previousInput} ${operation}`;
+        } else {
+          calcExpression.textContent = '';
+        }
+      }
 
-    // ========== DESCARGA REAL (ARCHIVO .TXT QUE SÍ SE PUEDE ABRIR) ==========
-    const instrucciones = `⚡ VOLTRIX v2.4 - INSTRUCCIONES DE INSTALACIÓN ⚡
-================================================
+      function updateDisplay() {
+        calcResult.textContent = currentInput;
+        if (currentInput === 'Error') {
+          calcResult.style.color = '#f43f5e';
+        } else {
+          calcResult.style.color = '#00f2ff';
+        }
+      }
 
-🎉 ¡GRACIAS POR DESCARGAR VOLTRIX!
+      renderButtons();
+      updateDisplay();
 
-📦 CONTENIDO DEL PAQUETE:
-   - voltrix.py (aplicación principal)
+      // ========== SISTEMA DE DESCARGA (COMO DISCORD) ==========
+      function setupDownload(button, progressContainer, progressFill, progressText) {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Ocultar botón y mostrar progreso
+          button.style.display = 'none';
+          progressContainer.style.display = 'block';
+          progressFill.style.width = '0%';
+          progressText.textContent = '⏳ Conectando con servidores VOLTRIX...';
+          
+          let width = 0;
+          const messages = [
+            'Conectando...', 'Descargando VOLTRIX...', 'Verificando archivos...',
+            'Instalando dependencias...', 'Configurando...', '¡Casi listo!'
+          ];
+          let msgIndex = 0;
+          
+          const interval = setInterval(() => {
+            if (width >= 100) {
+              clearInterval(interval);
+              progressText.textContent = '✅ ¡Instalación completada!';
+              
+              // Crear archivo de instalador
+              const installerContent = `@echo off
+          title VOLTRIX v2.4 - Instalador
+          echo ⚡ INSTALANDO VOLTRIX...
+          echo.
+          echo 📦 Extrayendo archivos...
+          timeout /t 3 >nul
+          echo ✅ Instalación completada!
+          echo 🚀 Iniciando VOLTRIX...
+          start https://www.youtube.com/watch?v=dQw4w9WgXcQ
+          pause`;
+              
+              const blob = new Blob([installerContent], { type: 'application/octet-stream' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'VOLTRIX_Setup.exe';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              
+              setTimeout(() => {
+                progressText.textContent = '🎉 VOLTRIX instalado correctamente!';
+                button.style.display = 'inline-flex';
+                progressContainer.style.display = 'none';
+              }, 2000);
+            } else {
+              width += Math.floor(Math.random() * 12) + 4;
+              if (width > 100) width = 100;
+              progressFill.style.width = width + '%';
+              
+              if (width % 20 === 0 && msgIndex < messages.length - 1) {
+                msgIndex++;
+              }
+              progressText.textContent = `${messages[msgIndex]} ${width}%`;
+            }
+          }, 150);
+        });
+      }
 
-📋 REQUISITOS:
-   1. Python 3.8 o superior instalado
-   2. pip (gestor de paquetes de Python)
-
-🚀 PASOS PARA INSTALAR:
-
-   🔹 WINDOWS:
-      1. Abre CMD (Símbolo del sistema)
-      2. Navega hasta la carpeta de descarga:
-         cd %USERPROFILE%\\Downloads
-      3. Instala la dependencia:
-         pip install customtkinter
-      4. Ejecuta VOLTRIX:
-         python voltrix.py
-
-   🔹 macOS / Linux:
-      1. Abre Terminal
-      2. Navega hasta la carpeta de descarga:
-         cd ~/Downloads
-      3. Instala la dependencia:
-         pip3 install customtkinter
-      4. Ejecuta VOLTRIX:
-         python3 voltrix.py
-
-📱 VERSIÓN MÓVIL:
-   Disponible próximamente en:
-   - Google Play Store
-   - Apple App Store
-
-🔑 LICENCIA: MIT - Uso libre
-📧 Soporte: voltrix@proton.me
-🌐 Web: voltrix.app
-
-⚡ ¡Disfruta de la calculadora más avanzada del futuro! ⚡`;
-
-    function descargarArchivo() {
-      const blob = new Blob([instrucciones], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'INSTALAR_VOLTRIX.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      setupDownload(
+        document.getElementById('heroDownloadBtn'),
+        document.getElementById('heroProgress'),
+        document.getElementById('heroProgressFill'),
+        document.getElementById('heroProgressText')
+      );
       
-      document.getElementById('successMsg').style.display = 'block';
-      setTimeout(() => {
-        document.getElementById('successMsg').style.display = 'none';
-      }, 5000);
-    }
-
-    document.getElementById('mainDownloadBtn').addEventListener('click', descargarArchivo);
-    document.getElementById('secondaryDownloadBtn').addEventListener('click', descargarArchivo);
+      setupDownload(
+        document.getElementById('mainDownloadBtn'),
+        document.getElementById('mainProgress'),
+        document.getElementById('mainProgressFill'),
+        document.getElementById('mainProgressText')
+      );
+    })();
   </script>
 </body>
 </html>
