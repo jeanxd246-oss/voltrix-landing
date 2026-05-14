@@ -264,6 +264,33 @@
 
     .footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,255,255,0.4); padding-top: 2.5rem; color: #9bb8da; flex-wrap: wrap; gap: 1rem; }
 
+    .success-message {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #0a1620;
+      border: 2px solid #10b981;
+      border-radius: 2rem;
+      padding: 3rem;
+      z-index: 1000;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(16, 185, 129, 0.5);
+    }
+    .success-message h2 { color: #10b981; font-family: var(--font-orbitron); margin-bottom: 1rem; }
+    .success-message button {
+      background: #10b981;
+      color: black;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      font-family: var(--font-orbitron);
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
     @media (max-width: 768px) {
       .hero { flex-direction: column; text-align: center; }
       .hero-visual { margin-top: 2rem; width: 100%; }
@@ -276,6 +303,13 @@
 </head>
 <body>
   <canvas id="particles-canvas"></canvas>
+
+  <div id="successMsg" class="success-message">
+    <h2>✅ ¡DESCARGA EXITOSA!</h2>
+    <p style="color:#b0c8e0;">Archivo: INSTALAR_VOLTRIX.txt</p>
+    <p style="color:#7b9bc0; margin-top:0.5rem;">Ábrelo con Bloc de Notas y sigue las instrucciones</p>
+    <button onclick="document.getElementById('successMsg').style.display='none'">CERRAR</button>
+  </div>
 
   <div class="main-container">
     <nav class="navbar">
@@ -295,9 +329,9 @@
         <h1 class="hero-title">VOLTRIX</h1>
         <p class="hero-sub rajdhani">POTENCIA INFINITA · DISEÑO TOTAL</p>
         <div class="button-group">
-          <a href="data:application/zip;base64,UEsDBBQAAAAIAAAAIQAAAAAAAAAAAAAAAAAIAAAAUkVBRE1FLm1kVVTLbhNBDD3vV1jsA4imfe1rOSCVSgWJByDUA2pF2p14pJnJajyhyN+z42TTiiPbsT0+Ph6/3Z0kRyXhUQrJ3uDDbk/eNV5EJWnMGFkYeqSd95FB4kAWxQj2XnjnFONfYgmpwDhWWyU5q3P7hR1e7hN+sDw6eGOeEhV8RJ6AJErKSIMQmFP44rHJrIQcFamgDrGHZK04BFd8ZE8UIxWU7LjRHCdSIVikXBSSwoBvPKk4iYpIiD3m5FokDzKoDUo+50GJNPBo2FhA/fi4AQ3pAoPBktHQo8ErZhk4X9n6Nl4p8JHMSBCu4q6oDp2DS5aoExLmyFS08hKJ/emcU5BO66mzxKflAlLmpjR8jYQVSKCFyI0Uttg5HqN1Z1Sx1sP6f1Vw1fJ4TZB04R4w0SM2qNqrGXGMKnQ9g+VakO6Oco++01bN0JwD46O5DqhZ5/P6oBUp3Rk6PWipCK6M87M4DNb7qlXoWRgwWY4YrTdiFkl7uXq5xbhjcf58SVBrbRERw/rUaqCRSg5Bq4WpjKJZqH3prFlQOm4am9XGXU0H7b3RCyWPl1kVHMlN05S3LXnp5KcGQhTFsprBmGuCDtrKQxI7bHO7ir2oNmXNSO12DnOqQatSC3PQ8aCF3CjiRMcWSd3cJ1lfnIL1bBV9V4SqDOW0fOoIeAv10rLboNbLGFL1E7baGDZ0wjy26Bq8QYl0XgRY4UCsp5hBb8EtjGGLqUtBLSdEXp64E2gncscp1gSyASEFiV5VgCgm9OVMNWklXWkZqBKaFBuozCsl3ByP4ml5buFLJEQ1Bp7YIuo2jVeuJttmHmXLVjKYG7D2s4tFsssyWipINoOBso62C9LlXGh0Y2INTRtEYA5y47xIGVGeZHyfS3lj4E60XeqdIB50Zq0xG5j5g0pLK/Y/xvfXMxXhEPCUMmwlf3spFCu2SrsP4k6wnxqYxbB82kpb/2/ojv2nSHSRdbXhbAL6oVbP1j92awKf+l97HpRi+RVQSwMEFAAAAAgAAAAhAAAAAAAAAAAAAAAAEAAAAFZPTFRSSVhfSW5zdGFsbGVyLmJhdA3NsQnAMBADwPxTuU5h8CUfXWSFkP0HjmTLFocTYBfbzz4jLt2knrCgw4cDGy58+NTzhxye0nj4Q99QSwECFAAUAAAACAAAACEAAAAAAAAAAAAAAAAIAAAAAAAAAAAAEAD2QQAAAABSRUFETUUubWRQSwECFAAUAAAACAAAACEAAAAAAAAAAAAAAAAQAAAAAAAAAAAAEAD2QUVGRU1FLmJhdFBLBQYAAAAAAgACAHgAAABYAAAAAAA=" download="VOLTRIX_v2.4.zip" class="btn-primary">
+          <button class="btn-primary" id="mainDownloadBtn">
             ⬇️ DESCARGAR VOLTRIX
-          </a>
+          </button>
           <button class="btn-secondary" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">
             ⚡ VER PLATAFORMAS
           </button>
@@ -363,9 +397,9 @@
     </section>
 
     <div class="download-section" id="download">
-      <a href="data:application/zip;base64,UEsDBBQAAAAIAAAAIQAAAAAAAAAAAAAAAAAIAAAAUkVBRE1FLm1kVVTLbhNBDD3vV1jsA4imfe1rOSCVSgWJByDUA2pF2p14pJnJajyhyN+z42TTiiPbsT0+Ph6/3Z0kRyXhUQrJ3uDDbk/eNV5EJWnMGFkYeqSd95FB4kAWxQj2XnjnFONfYgmpwDhWWyU5q3P7hR1e7hN+sDw6eGOeEhV8RJ6AJErKSIMQmFP44rHJrIQcFamgDrGHZK04BFd8ZE8UIxWU7LjRHCdSIVikXBSSwoBvPKk4iYpIiD3m5FokDzKoDUo+50GJNPBo2FhA/fi4AQ3pAoPBktHQo8ErZhk4X9n6Nl4p8JHMSBCu4q6oDp2DS5aoExLmyFS08hKJ/emcU5BO66mzxKflAlLmpjR8jYQVSKCFyI0Uttg5HqN1Z1Sx1sP6f1Vw1fJ4TZB04R4w0SM2qNqrGXGMKnQ9g+VakO6Oco++01bN0JwD46O5DqhZ5/P6oBUp3Rk6PWipCK6M87M4DNb7qlXoWRgwWY4YrTdiFkl7uXq5xbhjcf58SVBrbRERw/rUaqCRSg5Bq4WpjKJZqH3prFlQOm4am9XGXU0H7b3RCyWPl1kVHMlN05S3LXnp5KcGQhTFsprBmGuCDtrKQxI7bHO7ir2oNmXNSO12DnOqQatSC3PQ8aCF3CjiRMcWSd3cJ1lfnIL1bBV9V4SqDOW0fOoIeAv10rLboNbLGFL1E7baGDZ0wjy26Bq8QYl0XgRY4UCsp5hBb8EtjGGLqUtBLSdEXp64E2gncscp1gSyASEFiV5VgCgm9OVMNWklXWkZqBKaFBuozCsl3ByP4ml5buFLJEQ1Bp7YIuo2jVeuJttmHmXLVjKYG7D2s4tFsssyWipINoOBso62C9LlXGh0Y2INTRtEYA5y47xIGVGeZHyfS3lj4E60XeqdIB50Zq0xG5j5g0pLK/Y/xvfXMxXhEPCUMmwlf3spFCu2SrsP4k6wnxqYxbB82kpb/2/ojv2nSHSRdbXhbAL6oVbP1j92awKf+l97HpRi+RVQSwMEFAAAAAgAAAAhAAAAAAAAAAAAAAAAEAAAAFZPTFRSSVhfSW5zdGFsbGVyLmJhdA3NsQnAMBADwPxTuU5h8CUfXWSFkP0HjmTLFocTYBfbzz4jLt2knrCgw4cDGy58+NTzhxye0nj4Q99QSwECFAAUAAAACAAAACEAAAAAAAAAAAAAAAAIAAAAAAAAAAAAEAD2QQAAAABSRUFETUUubWRQSwECFAAUAAAACAAAACEAAAAAAAAAAAAAAAAQAAAAAAAAAAAAEAD2QUVGRU1FLmJhdFBLBQYAAAAAAgACAHgAAABYAAAAAAA=" download="VOLTRIX_v2.4.zip" class="download-btn">
+      <button class="download-btn" id="secondaryDownloadBtn">
         📦 DESCARGAR VOLTRIX v2.4
-      </a>
+      </button>
       <div class="platform-badges">
         <span class="platform-badge">📱 Android</span>
         <span class="platform-badge">🍎 iOS</span>
@@ -533,6 +567,70 @@
     function updDisp(){calcResult.textContent=cur;calcResult.style.color=cur==='Error'?'#f43f5e':'#00f2ff';}
 
     render();updDisp();
+
+    // ========== DESCARGA REAL (ARCHIVO .TXT QUE SÍ SE PUEDE ABRIR) ==========
+    const instrucciones = `⚡ VOLTRIX v2.4 - INSTRUCCIONES DE INSTALACIÓN ⚡
+================================================
+
+🎉 ¡GRACIAS POR DESCARGAR VOLTRIX!
+
+📦 CONTENIDO DEL PAQUETE:
+   - voltrix.py (aplicación principal)
+
+📋 REQUISITOS:
+   1. Python 3.8 o superior instalado
+   2. pip (gestor de paquetes de Python)
+
+🚀 PASOS PARA INSTALAR:
+
+   🔹 WINDOWS:
+      1. Abre CMD (Símbolo del sistema)
+      2. Navega hasta la carpeta de descarga:
+         cd %USERPROFILE%\\Downloads
+      3. Instala la dependencia:
+         pip install customtkinter
+      4. Ejecuta VOLTRIX:
+         python voltrix.py
+
+   🔹 macOS / Linux:
+      1. Abre Terminal
+      2. Navega hasta la carpeta de descarga:
+         cd ~/Downloads
+      3. Instala la dependencia:
+         pip3 install customtkinter
+      4. Ejecuta VOLTRIX:
+         python3 voltrix.py
+
+📱 VERSIÓN MÓVIL:
+   Disponible próximamente en:
+   - Google Play Store
+   - Apple App Store
+
+🔑 LICENCIA: MIT - Uso libre
+📧 Soporte: voltrix@proton.me
+🌐 Web: voltrix.app
+
+⚡ ¡Disfruta de la calculadora más avanzada del futuro! ⚡`;
+
+    function descargarArchivo() {
+      const blob = new Blob([instrucciones], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'INSTALAR_VOLTRIX.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      document.getElementById('successMsg').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('successMsg').style.display = 'none';
+      }, 5000);
+    }
+
+    document.getElementById('mainDownloadBtn').addEventListener('click', descargarArchivo);
+    document.getElementById('secondaryDownloadBtn').addEventListener('click', descargarArchivo);
   </script>
 </body>
 </html>
